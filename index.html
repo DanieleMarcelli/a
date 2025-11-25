@@ -1,55 +1,44 @@
-
 <!DOCTYPE html>
 <html lang="it" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rendiconto di Mandato | Avigliano Umbro 2027</title>
-    <meta name="description" content="Rendiconto di mandato 2022-2027 dell'Amministrazione di Avigliano Umbro. Fatti concreti, opere pubbliche e visione partecipata per il futuro.">
+    <meta name="description" content="Rendiconto di mandato 2022-2027. Confronto tra programma elettorale e risultati concreti.">
     
-    <!-- Open Graph / Social Media -->
-    <meta property="og:title" content="Rendiconto di Mandato – Avigliano Umbro 2022–2027">
-    <meta property="og:description" content="Esplora i risultati raggiunti: opere pubbliche, sociale, cultura e vota le priorità per i prossimi anni. Trasparenza e fatti concreti.">
-    <meta property="og:image" content="https://images.unsplash.com/photo-1449824913929-4bd52643881a?q=80&w=1200&auto=format&fit=crop">
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://aviglianoumbro2027.it">
-    <meta property="og:locale" content="it_IT">
-    <meta name="twitter:card" content="summary_large_image">
+    <!-- Open Graph -->
+    <meta property="og:title" content="Avigliano Umbro: Promesse Mantenute">
+    <meta property="og:description" content="Esplora il confronto tra il programma 2021 e i risultati 2027.">
+    <meta property="og:image" content="https://images.unsplash.com/photo-1449824913929-4bd52643881a?q=80&w=1200">
     
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Manrope:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
     
-    <!-- Tailwind CSS -->
+    <!-- Tailwind -->
     <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- Tailwind Configuration -->
     <script>
         tailwind.config = {
+            darkMode: 'class',
             theme: {
                 extend: {
                     colors: {
-                        'brand-blue': '#004aad', 
-                        'brand-dark': '#0a192f',
-                        'brand-accent': '#fbbf24', 
-                        // Area Colors
-                        'area-social': '#3b82f6', // Blue
-                        'area-culture': '#10b981', // Green
-                        'area-works': '#854d0e',   // Brown
-                        'area-env': '#f97316',     // Orange
-                        'area-admin': '#475569',   // Slate/Grey
+                        'brand-blue': 'var(--color-primary)', 
+                        'brand-dark': 'var(--color-dark)',
+                        'brand-accent': 'var(--color-accent)',
+                        'area-social': '#3b82f6',
+                        'area-culture': '#10b981',
+                        'area-works': '#d97706',
+                        'area-env': '#f97316',
+                        'area-admin': '#64748b'
                     },
                     fontFamily: {
-                        sans: ['Manrope', 'sans-serif'],
-                        serif: ['Playfair Display', 'serif'],
+                        sans: 'var(--font-body)',
+                        serif: 'var(--font-heading)',
                     },
-                    backgroundImage: {
-                        'blueprint': "url('https://www.transparenttextures.com/patterns/blueprint.png')",
-                    },
-                    animation: {
-                        'bounce-slow': 'bounce 3s infinite',
-                    }
+                    borderRadius: { 'theme': 'var(--radius-theme)' },
+                    boxShadow: { 'theme': 'var(--shadow-theme)' }
                 }
             }
         }
@@ -60,1460 +49,671 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollToPlugin.min.js"></script>
 
-    <!-- Custom Styles -->
     <style>
+        :root {
+            /* THEME: CLASSIC (Default) */
+            --color-primary: #004aad;
+            --color-dark: #0a192f;
+            --color-accent: #fbbf24;
+            --font-heading: 'Playfair Display', serif;
+            --font-body: 'Manrope', sans-serif;
+            --radius-theme: 0.75rem; 
+            --shadow-theme: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        body.theme-modern {
+            --color-primary: #2563eb;
+            --color-dark: #1e293b;
+            --color-accent: #60a5fa;
+            --font-heading: 'Inter', sans-serif;
+            --font-body: 'Inter', sans-serif;
+            --radius-theme: 0px;
+            --shadow-theme: none;
+            background-color: #ffffff;
+        }
+
+        body.theme-energetic {
+            --color-primary: #1d4ed8;
+            --color-dark: #000000;
+            --color-accent: #facc15;
+            --font-heading: 'Manrope', sans-serif;
+            --font-body: 'Manrope', sans-serif;
+            --radius-theme: 1.5rem;
+            --shadow-theme: 5px 5px 0px rgba(0,0,0,1);
+        }
+
         body {
             background-color: #f8fafc;
-            color: #1e293b;
-            overflow-x: hidden;
+            color: #334155;
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
+
+        /* ADMIN INTERACTIVE MODE */
+        body.admin-mode .admin-selectable {
+            position: relative;
+            cursor: pointer;
+            border: 2px solid transparent;
+        }
+        body.admin-mode .admin-selectable:hover {
+            border: 2px dashed #fbbf24;
+            background-color: rgba(251, 191, 36, 0.05);
+        }
+        body.admin-mode .admin-selectable::after {
+            content: "✎ Modifica";
+            position: absolute;
+            top: 10px; right: 10px;
+            background: #fbbf24; color: #000;
+            font-size: 10px; font-weight: bold;
+            padding: 4px 8px; border-radius: 4px;
+            opacity: 0; pointer-events: none; z-index: 50;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        body.admin-mode .admin-selectable:hover::after { opacity: 1; }
         
-        /* Glass Card & Interactions */
+        /* UI COMPONENTS */
         .glass-card {
             background: white;
             border: 1px solid #e2e8f0;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-            transition: box-shadow 0.3s ease, border-color 0.3s ease; /* Transform managed by JS Tilt */
-            transform-style: preserve-3d;
-            backface-visibility: hidden;
-        }
-
-        .glass-card:hover {
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-            border-color: #cbd5e1;
-        }
-
-        /* Hero Parallax */
-        .hero-video-bg {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 150%; 
-            object-fit: cover;
-            z-index: 0;
-            filter: brightness(0.4);
-            will-change: transform;
-        }
-
-        .promise-quote {
-            border-left: 3px solid #cbd5e1;
-            padding-left: 10px;
-            font-style: italic;
-            color: #64748b;
-            font-size: 0.8rem;
-            margin-bottom: 10px;
-            background: #f8fafc;
-            padding: 8px;
-            border-radius: 0 4px 4px 0;
-        }
-
-        /* Comparison Slider */
-        .comparison-wrapper {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-            cursor: ew-resize;
-            user-select: none;
-        }
-        .comparison-after {
-            position: absolute;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background-size: cover;
-            background-position: center;
-        }
-        .comparison-before {
-            position: absolute;
-            top: 0; left: 0;
-            width: 50%; height: 100%;
-            background-size: cover; /* Must match parent logic if implemented via image tag, but bg image is safer for clipping */
-            background-position: center;
-            border-right: 3px solid white;
-            overflow: hidden;
-            z-index: 10;
-        }
-        .comparison-handle {
-            position: absolute;
-            top: 50%; left: 50%;
-            transform: translate(-50%, -50%);
-            width: 32px; height: 32px;
-            background: rgba(255,255,255,0.9);
-            border-radius: 50%;
-            z-index: 20;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.3);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            pointer-events: none; /* Let clicks pass to wrapper */
-        }
-
-        /* Blueprint Section */
-        .blueprint-bg {
-            background-color: #1e3a8a;
-            background-image: linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px);
-            background-size: 20px 20px;
-        }
-
-        /* Admin Mode */
-        .admin-mode .editable-text:hover {
-            outline: 2px dashed #fbbf24;
-            background: rgba(251, 191, 36, 0.1);
-            cursor: text;
-        }
-
-        /* Map Markers */
-        .map-marker {
-            position: absolute;
-            width: 24px;
-            height: 24px;
-            border: 2px solid white;
-            border-radius: 50%;
-            cursor: pointer;
-            transition: transform 0.3s;
-            z-index: 10;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.3);
-        }
-        .map-marker:hover {
-            transform: scale(1.5);
-            z-index: 20;
-        }
-        .map-marker.active-marker {
-            transform: scale(1.5);
-            box-shadow: 0 0 0 4px rgba(251, 191, 36, 0.5);
-            z-index: 30;
-        }
-        .map-popup {
-            position: absolute;
-            bottom: 30px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: white;
-            padding: 8px 12px;
-            border-radius: 8px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-            font-size: 0.75rem;
-            white-space: nowrap;
-            display: none;
-            z-index: 30;
-            border: 1px solid #e2e8f0;
-            font-family: 'Manrope', sans-serif;
-            color: #1e293b;
-        }
-        .map-marker:hover .map-popup, .map-marker.active-marker .map-popup {
-            display: block;
-        }
-
-        /* Priority Cards */
-        .priority-card {
-            cursor: pointer;
+            box-shadow: var(--shadow-theme);
+            border-radius: var(--radius-theme);
             transition: all 0.3s ease;
+            transform-style: preserve-3d;
         }
-        .priority-card:hover {
-            border-color: #93c5fd;
-            transform: translateY(-2px);
-        }
-        .priority-card.selected {
-            border-color: #004aad;
-            background-color: #eff6ff;
-            box-shadow: 0 0 0 2px rgba(0, 74, 173, 0.1);
-        }
+        body.theme-energetic .glass-card { border: 2px solid #000; }
+        .glass-card:hover { transform: translateY(-5px); box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04); }
+
+        .comparison-wrapper { position: relative; width: 100%; height: 100%; overflow: hidden; cursor: ew-resize; user-select: none; }
+        .comparison-after { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-size: cover; background-position: center; }
+        .comparison-before { position: absolute; top: 0; left: 0; width: 50%; height: 100%; background-size: cover; background-position: center; border-right: 3px solid white; overflow: hidden; z-index: 10; }
+        .comparison-handle { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 32px; height: 32px; background: rgba(255,255,255,0.9); border-radius: 50%; z-index: 20; box-shadow: 0 2px 6px rgba(0,0,0,0.3); display: flex; align-items: center; justify-content: center; pointer-events: none; }
+
+        .map-marker { position: absolute; width: 20px; height: 20px; border: 2px solid white; border-radius: 50%; cursor: pointer; transition: transform 0.3s; z-index: 10; box-shadow: 0 2px 4px rgba(0,0,0,0.3); }
+        .map-marker:hover { transform: scale(1.5); z-index: 20; }
+        .map-popup { position: absolute; bottom: 25px; left: 50%; transform: translateX(-50%); background: white; padding: 6px 10px; border-radius: 6px; box-shadow: 0 4px 10px rgba(0,0,0,0.2); font-size: 0.7rem; white-space: nowrap; display: none; z-index: 30; font-weight: bold; color: var(--color-primary); }
+        .map-marker:hover .map-popup { display: block; }
+
+        /* LIST STYLES */
+        .check-list li { position: relative; padding-left: 1.5rem; margin-bottom: 0.5rem; font-size: 0.95rem; line-height: 1.5; }
+        .check-list li::before { content: '✓'; position: absolute; left: 0; color: var(--color-primary); font-weight: bold; }
         
-        /* List View Details Expansion */
-        .list-details {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.3s ease-out;
-        }
-        .list-details.open {
-            max-height: 500px; /* arbitrary large height */
-            transition: max-height 0.5s ease-in;
-        }
+        .promise-list li { position: relative; padding-left: 1.5rem; margin-bottom: 0.5rem; font-size: 0.95rem; line-height: 1.5; color: #64748b; font-style: italic; }
+        .promise-list li::before { content: '➔'; position: absolute; left: 0; color: #94a3b8; }
 
-        /* Toast Notifications */
-        #toast-container {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            z-index: 9999;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-        .toast {
-            background: white;
-            color: #1e293b;
-            padding: 12px 16px;
-            border-radius: 8px;
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-            border-left: 4px solid #004aad;
-            font-size: 0.875rem;
-            font-weight: 600;
-            animation: slideIn 0.3s ease-out forwards;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            min-width: 250px;
-        }
-        .toast.error { border-left-color: #ef4444; }
-        .toast.success { border-left-color: #22c55e; }
-        .toast.info { border-left-color: #3b82f6; }
-
-        @keyframes slideIn {
-            from { transform: translateX(100%); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
-        }
-        @keyframes fadeOut {
-            to { opacity: 0; transform: translateX(10px); }
-        }
-
-        /* Loading Spinner */
-        .loader {
-            border: 2px solid #f3f3f3;
-            border-top: 2px solid #004aad;
-            border-radius: 50%;
-            width: 16px;
-            height: 16px;
-            animation: spin 1s linear infinite;
-            display: inline-block;
-        }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-
-        /* Scroll Top Button */
-        #scroll-top {
-            opacity: 0;
-            pointer-events: none;
-            transition: all 0.3s;
-        }
-        #scroll-top.visible {
-            opacity: 1;
-            pointer-events: auto;
-        }
-
-        /* Timeline (Chi Sono) */
-        .timeline-line {
-            position: absolute;
-            left: 24px;
-            top: 0;
-            bottom: 0;
-            width: 2px;
-            background: #334155;
-            z-index: 0;
-        }
-        @media(min-width: 768px) {
-            .timeline-line {
-                left: 50%;
-                transform: translateX(-50%);
-            }
-        }
+        #toast-container { position: fixed; bottom: 20px; right: 20px; z-index: 9999; display: flex; flex-direction: column; gap: 10px; }
+        .toast { background: white; color: #1e293b; padding: 12px 16px; border-radius: 8px; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); border-left: 4px solid var(--color-primary); font-size: 0.875rem; font-weight: 600; animation: slideIn 0.3s ease-out forwards; }
+        @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
     </style>
 </head>
-<body class="antialiased font-sans">
+<body class="antialiased font-sans theme-classic">
 
-    <!-- TOAST CONTAINER -->
+    <!-- UTILS -->
     <div id="toast-container"></div>
+    <div id="scroll-top" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="fixed bottom-8 right-8 z-40 bg-brand-blue text-white p-3 rounded-full shadow-lg hover:bg-opacity-90 hover:-translate-y-1 transform transition-all cursor-pointer opacity-0 pointer-events-none">↑</div>
 
-    <!-- SCROLL TO TOP -->
-    <button id="scroll-top" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="fixed bottom-8 right-8 z-40 bg-brand-blue text-white p-3 rounded-full shadow-lg hover:bg-blue-700 hover:-translate-y-1 transform transition-all" aria-label="Torna su">
-        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"></path></svg>
-    </button>
-
-    <!-- ADMIN DASHBOARD (CMS) -->
-    <div id="admin-dashboard" class="fixed inset-y-0 right-0 w-full md:w-[700px] bg-white shadow-2xl z-[200] transform translate-x-full transition-transform duration-300 flex flex-col font-sans">
-        <!-- (CMS Content identical to v5.0 with full features) -->
-        <div class="bg-brand-dark text-white p-5 flex justify-between items-center shadow-md">
-            <div>
-                <h2 class="font-bold text-xl text-brand-accent tracking-tight flex items-center gap-2">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
-                    CMS Admin 5.1
-                </h2>
-                <p class="text-xs text-gray-400">Pannello di Controllo Integrato</p>
-            </div>
-            <button onclick="Admin.toggle()" class="text-white hover:text-gray-300" aria-label="Chiudi Admin">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-            </button>
+    <!-- ADMIN SIDEBAR -->
+    <div id="admin-dashboard" class="fixed inset-y-0 right-0 w-full md:w-[450px] bg-white shadow-2xl z-[200] transform translate-x-full transition-transform duration-300 flex flex-col border-l border-gray-200">
+        <div class="bg-brand-dark text-white p-4 flex justify-between items-center shadow-md shrink-0">
+            <div><h2 class="font-bold text-lg text-brand-accent">⚙️ Pannello Admin</h2><p class="text-[10px] text-gray-400">Modalità Modifica Attiva</p></div>
+            <button onclick="Admin.toggle()" class="text-white hover:text-gray-300">✕</button>
         </div>
         
-        <div class="flex-1 overflow-y-auto p-6 bg-slate-50">
-            <!-- Navigation -->
-            <div class="flex mb-6 border-b border-gray-200 overflow-x-auto">
-                <button onclick="Admin.switchTab('projects')" id="tab-projects" class="px-5 py-3 text-sm font-bold text-brand-blue border-b-2 border-brand-blue transition-colors whitespace-nowrap">Progetti</button>
-                <button onclick="Admin.switchTab('priorities')" id="tab-priorities" class="px-5 py-3 text-sm font-bold text-gray-500 hover:text-brand-blue transition-colors whitespace-nowrap">Priorità</button>
-                <button onclick="Admin.switchTab('settings')" id="tab-settings" class="px-5 py-3 text-sm font-bold text-gray-500 hover:text-brand-blue transition-colors whitespace-nowrap">Impostazioni</button>
-                <button onclick="Admin.switchTab('texts')" id="tab-texts" class="px-5 py-3 text-sm font-bold text-gray-500 hover:text-brand-blue transition-colors whitespace-nowrap">Testi</button>
-            </div>
-
-            <!-- TAB: PROJECTS -->
-            <div id="admin-tab-projects">
-                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 mb-6">
-                    <h3 id="form-title" class="font-bold text-lg mb-4 text-gray-800 flex items-center gap-2">
-                        <span class="w-2 h-6 bg-brand-blue rounded-full"></span>
-                        Gestione Progetto
-                    </h3>
-                    
-                    <div class="grid grid-cols-1 gap-4 mb-4">
-                        <input type="text" id="edit-title" placeholder="Titolo opera (Es. Riqualificazione Piazza) *" class="p-3 border rounded-lg bg-gray-50 text-sm font-bold focus:ring-2 focus:ring-blue-100 outline-none">
-                    </div>
-
-                    <div class="grid grid-cols-2 gap-4 mb-4">
-                        <select id="edit-year" class="p-3 border rounded-lg bg-gray-50 text-sm outline-none"></select>
-                        <select id="edit-category" class="p-3 border rounded-lg bg-gray-50 text-sm outline-none"></select>
-                    </div>
-
-                    <div class="grid grid-cols-2 gap-4 mb-4">
-                        <select id="edit-stato" class="p-3 border rounded-lg bg-gray-50 text-sm outline-none" onchange="Admin.toggleCantiereFields()">
-                            <option value="concluso">✅ Concluso</option>
-                            <option value="in_corso">🚧 In Corso</option>
-                            <option value="programmato">📅 Programmato</option>
-                        </select>
-                        <select id="edit-localita" class="p-3 border rounded-lg bg-gray-50 text-sm outline-none"></select>
-                    </div>
-
-                    <div id="cantiere-fields" class="hidden mb-4 bg-yellow-50 p-4 rounded-lg border border-yellow-100">
-                         <h4 class="text-xs font-bold text-yellow-700 uppercase mb-2">Dettagli Cantiere</h4>
-                         <div class="grid grid-cols-2 gap-4 mb-2">
-                             <input type="number" id="edit-progress" placeholder="% Avanzamento (0-100)" class="p-2 border rounded bg-white text-sm" min="0" max="100">
-                             <input type="text" id="edit-fase" placeholder="Fase attuale (es. Scavi)" class="p-2 border rounded bg-white text-sm">
-                         </div>
-                         <input type="text" id="edit-note-cantiere" placeholder="Note tecniche pubbliche (es. Ritardo per maltempo)" class="w-full p-2 border rounded bg-white text-sm">
-                    </div>
-
-                    <div class="grid grid-cols-2 gap-4 mb-4">
-                         <input type="number" id="edit-importo" placeholder="Importo (€)" class="p-3 border rounded-lg bg-gray-50 text-sm outline-none">
-                         <input type="text" id="edit-fonte" placeholder="Fonte (es. PNRR)" class="p-3 border rounded-lg bg-gray-50 text-sm outline-none">
-                    </div>
-
-                    <div class="mb-4">
-                         <input type="text" id="edit-link" placeholder="Link Delibera/Info (https://...)" class="w-full p-3 border rounded-lg bg-gray-50 text-sm outline-none">
-                    </div>
-                    
-                    <textarea id="edit-promise" placeholder="La promessa originale (dal programma)..." rows="2" class="w-full mb-2 p-3 border rounded-lg bg-blue-50 text-sm border-blue-100 placeholder-blue-300 outline-none"></textarea>
-                    <textarea id="edit-desc" placeholder="Il risultato ottenuto / Descrizione lavori..." rows="3" class="w-full mb-4 p-3 border rounded-lg bg-green-50 text-sm border-green-100 placeholder-green-300 outline-none"></textarea>
-
-                    <div class="grid grid-cols-2 gap-4 mb-4">
-                        <div class="admin-dropzone p-4 border-2 border-dashed border-gray-300 rounded-xl text-center cursor-pointer hover:bg-gray-50 hover:border-brand-blue transition-colors group" onclick="document.getElementById('file-after').click()">
-                            <input type="file" id="file-after" class="hidden" accept="image/*" onchange="Admin.previewImage(this, 'preview-after')">
-                            <div id="preview-after" class="h-24 flex flex-col items-center justify-center text-xs text-gray-400 font-medium overflow-hidden group-hover:text-brand-blue">
-                                <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-                                Foto Principale
-                            </div>
-                        </div>
-                        <div class="admin-dropzone p-4 border-2 border-dashed border-gray-300 rounded-xl text-center cursor-pointer hover:bg-gray-50 hover:border-brand-blue transition-colors group" onclick="document.getElementById('file-before').click()">
-                            <input type="file" id="file-before" class="hidden" accept="image/*" onchange="Admin.previewImage(this, 'preview-before')">
-                            <div id="preview-before" class="h-24 flex flex-col items-center justify-center text-xs text-gray-400 font-medium overflow-hidden group-hover:text-brand-blue">
-                                <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                                Foto Prima (Opz.)
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="flex gap-3 pt-2">
-                        <button onclick="Admin.saveProject()" class="flex-1 bg-brand-blue text-white font-bold py-3 rounded-lg shadow-lg hover:bg-blue-700 transition-all transform hover:scale-[1.02]">Salva Progetto</button>
-                        <button onclick="Admin.resetForm()" class="px-6 py-3 bg-gray-100 text-gray-600 rounded-lg font-bold hover:bg-gray-200 transition-colors">Nuovo</button>
-                    </div>
-                </div>
-                
-                <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-                    <div class="p-4 bg-gray-50 border-b border-gray-200 flex justify-between items-center sticky top-0 z-10">
-                        <div class="relative flex-1 mr-4">
-                            <input type="text" id="admin-search" placeholder="Cerca progetti..." class="w-full pl-8 pr-4 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-blue-100 outline-none" onkeyup="Admin.renderProjectsList()">
-                            <svg class="w-4 h-4 text-gray-400 absolute left-2.5 top-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
-                        </div>
-                        <span id="admin-count" class="bg-brand-blue text-white text-xs font-bold px-2 py-1 rounded-full">0</span>
-                    </div>
-                    <div id="admin-project-list" class="divide-y divide-gray-100 max-h-[400px] overflow-y-auto"></div>
+        <!-- DYNAMIC CONTEXTUAL EDITOR -->
+        <div id="admin-context-editor" class="flex-1 overflow-y-auto p-6 bg-slate-50 relative">
+            <div id="admin-default-view" class="text-center mt-10 opacity-50">
+                <p class="text-4xl mb-2">👆</p>
+                <p class="text-sm font-bold">Clicca su una sezione del sito<br>per modificarla qui.</p>
+                <div class="mt-10 border-t pt-10">
+                    <p class="text-xs font-bold uppercase mb-4 text-left">Impostazioni Generali:</p>
+                    <button onclick="Admin.loadSectionEditor('design')" class="w-full bg-white border border-gray-200 p-3 rounded mb-2 hover:bg-blue-50 font-bold text-sm text-left shadow-sm flex items-center gap-2">🎨 Layout & Tema</button>
+                    <button onclick="Admin.exportData()" class="w-full bg-gray-800 text-white p-3 rounded mt-4 font-bold text-sm">💾 Backup Dati (JSON)</button>
+                    <button onclick="Admin.resetData()" class="w-full text-red-500 p-3 rounded mt-2 text-xs hover:bg-red-50">⚠️ Ripristina Dati Iniziali</button>
                 </div>
             </div>
-
-            <!-- TAB: PRIORITIES -->
-            <div id="admin-tab-priorities" class="hidden">
-                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 mb-6">
-                    <h3 class="font-bold text-lg mb-4 text-gray-800">Aggiungi Priorità</h3>
-                    <div class="flex gap-2 mb-2">
-                        <input type="text" id="prio-id" placeholder="ID univoco" class="w-1/3 p-2 border rounded text-sm bg-gray-50">
-                        <input type="text" id="prio-icon" placeholder="Emoji" class="w-1/6 p-2 border rounded text-sm bg-gray-50 text-center">
-                        <input type="text" id="prio-title" placeholder="Titolo" class="flex-1 p-2 border rounded text-sm bg-gray-50 font-bold">
-                    </div>
-                    <textarea id="prio-desc" placeholder="Descrizione breve..." rows="2" class="w-full p-2 border rounded text-sm bg-gray-50 mb-3"></textarea>
-                    <button onclick="Admin.addPriority()" class="w-full bg-green-600 text-white font-bold py-2 rounded shadow hover:bg-green-700">Aggiungi Priorità</button>
-                </div>
-                
-                <div class="flex justify-between items-center mb-2 px-2">
-                    <h4 class="font-bold text-sm text-gray-500 uppercase">Lista Priorità Attive</h4>
-                    <button onclick="Admin.resetVotes()" class="text-xs text-red-500 hover:text-red-700 font-bold underline">Resetta Voti</button>
-                </div>
-                <div id="admin-priorities-list" class="space-y-3"></div>
+            <div id="admin-dynamic-form" class="hidden space-y-4">
+                <!-- Form generated by JS -->
             </div>
-
-            <!-- TAB: SETTINGS -->
-            <div id="admin-tab-settings" class="hidden">
-                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 mb-6 space-y-4">
-                    <h3 class="font-bold text-lg text-gray-800">Configurazione Sistema</h3>
-                    <div>
-                        <label class="block text-xs font-bold text-gray-500 mb-1">Anni Gestiti</label>
-                        <input type="text" id="set-years" class="w-full p-2 border rounded bg-gray-50 text-sm">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold text-gray-500 mb-1">Località</label>
-                        <input type="text" id="set-locations" class="w-full p-2 border rounded bg-gray-50 text-sm">
-                    </div>
-                    <button onclick="Admin.saveSettings()" class="w-full bg-brand-blue text-white font-bold py-2 rounded shadow hover:bg-blue-700">Salva Impostazioni</button>
-                </div>
-            </div>
-
-            <!-- TAB: TEXTS -->
-            <div id="admin-tab-texts" class="hidden">
-                 <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 space-y-4">
-                    <h3 class="font-bold text-lg text-gray-800">Testi Globali</h3>
-                    <div><label class="block text-xs font-bold text-gray-500 mb-1">Titolo Hero</label><input type="text" id="txt-hero-title" class="w-full p-2 border rounded text-sm"></div>
-                    <div><label class="block text-xs font-bold text-gray-500 mb-1">Sottotitolo Hero</label><textarea id="txt-hero-desc" rows="2" class="w-full p-2 border rounded text-sm"></textarea></div>
-                    <button onclick="Admin.saveGlobalTexts()" class="w-full bg-brand-blue text-white font-bold py-2 rounded shadow hover:bg-blue-700">Aggiorna Testi</button>
-                </div>
-            </div>
-
-            <!-- FOOTER ACTIONS -->
-            <div class="grid grid-cols-2 gap-3 mt-8 pt-6 border-t border-gray-200">
-                <button onclick="Admin.exportData()" class="bg-gray-800 text-white text-xs font-bold py-3 rounded hover:bg-gray-700 flex items-center justify-center gap-2">
-                    Backup JSON
-                </button>
-                <label class="bg-gray-800 text-white text-xs font-bold py-3 rounded hover:bg-gray-700 text-center cursor-pointer flex items-center justify-center gap-2">
-                    Ripristina
-                    <input type="file" class="hidden" onchange="Admin.importData(this)" accept=".json">
-                </label>
-            </div>
-            <button onclick="Admin.logout()" class="w-full mt-3 text-red-500 text-xs font-bold hover:underline">Esci dal pannello</button>
         </div>
     </div>
 
     <!-- LOGIN MODAL -->
     <div id="login-modal" class="fixed inset-0 z-[250] bg-brand-dark/90 flex items-center justify-center hidden backdrop-blur-md">
-        <div class="bg-white p-8 rounded-2xl w-full max-w-sm shadow-2xl text-center transform transition-all scale-100">
-            <h3 class="text-2xl font-bold mb-2 text-brand-dark">Area Staff</h3>
-            <p class="text-sm text-gray-500 mb-6">Inserisci password di amministrazione</p>
-            <input type="password" id="admin-password" placeholder="••••••••" class="w-full p-3 border rounded-lg mb-4 text-center text-lg tracking-widest focus:ring-2 focus:ring-brand-blue outline-none" onkeyup="if(event.key === 'Enter') Admin.login()">
-            <button onclick="Admin.login()" class="w-full bg-brand-blue text-white font-bold py-3 rounded-lg hover:bg-blue-700 transition-colors shadow-lg">ACCEDI</button>
-            <button onclick="document.getElementById('login-modal').classList.add('hidden')" class="block w-full mt-6 text-xs text-gray-400 hover:text-white transition-colors">Torna al sito</button>
+        <div class="bg-white p-8 rounded-2xl w-full max-w-sm shadow-2xl text-center">
+            <h3 class="text-2xl font-bold mb-2 text-brand-dark">Accesso Staff</h3>
+            <p class="text-sm text-gray-500 mb-6">Inserisci la password amministratore</p>
+            <input type="password" id="admin-password" placeholder="Password" class="w-full p-3 border rounded-lg mb-4 text-center text-lg outline-none focus:ring-2 focus:ring-brand-blue" onkeyup="if(event.key === 'Enter') Admin.login()">
+            <button onclick="Admin.login()" class="w-full bg-brand-blue text-white font-bold py-3 rounded-lg hover:bg-blue-700 shadow-lg transition-colors">ACCEDI</button>
         </div>
     </div>
 
     <!-- NAVBAR -->
-    <nav class="fixed w-full z-50 top-0 bg-white/95 backdrop-blur-md border-b border-gray-200 transition-all duration-300 shadow-sm" id="navbar">
+    <nav class="fixed w-full z-50 top-0 bg-white/95 backdrop-blur-md border-b border-gray-200 transition-all duration-300 shadow-sm">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-20">
-                <div class="flex items-center gap-3 cursor-pointer group" onclick="window.scrollTo(0,0)">
-                    <div class="w-10 h-10 bg-brand-blue rounded-lg flex items-center justify-center text-white font-bold text-xl shadow-lg transform group-hover:rotate-12 transition-transform duration-300">A</div>
+                <div class="flex items-center gap-3 cursor-pointer" onclick="window.scrollTo(0,0)">
+                    <div class="w-10 h-10 bg-brand-blue rounded-theme flex items-center justify-center text-white font-bold text-xl shadow-lg">A</div>
                     <div class="leading-tight">
-                        <span class="block font-bold text-lg tracking-tight text-brand-dark">AVIGLIANO <span class="text-brand-blue">2027</span></span>
-                        <span class="block text-[10px] text-gray-500 uppercase tracking-widest font-semibold">Prima di Tutto</span>
+                        <span class="block font-bold text-lg tracking-tight text-brand-dark font-serif">AVIGLIANO <span class="text-brand-blue">2027</span></span>
                     </div>
                 </div>
                 <div class="hidden lg:flex space-x-8 items-center">
-                    <a href="#progetti" class="nav-link text-gray-600 hover:text-brand-blue font-bold text-sm uppercase tracking-wide transition-colors">Risultati</a>
-                    <a href="#mappa" class="nav-link text-gray-600 hover:text-brand-blue font-bold text-sm uppercase tracking-wide transition-colors">Mappa</a>
-                    <a href="#lavori-in-corso" class="nav-link text-gray-600 hover:text-brand-blue font-bold text-sm uppercase tracking-wide transition-colors">Cantieri</a>
-                    <a href="#chi-sono" class="nav-link text-gray-600 hover:text-brand-blue font-bold text-sm uppercase tracking-wide transition-colors">Chi Sono</a>
-                    <a href="#priorita" class="px-5 py-2.5 bg-brand-blue text-white rounded-full font-bold text-sm shadow-lg hover:bg-blue-700 transition-all hover:scale-105 active:scale-95">Vota il Futuro</a>
+                    <a href="#confronto" class="text-gray-600 hover:text-brand-blue font-bold text-sm uppercase font-sans tracking-wide">Promesso vs Fatto</a>
+                    <a href="#progetti" class="text-gray-600 hover:text-brand-blue font-bold text-sm uppercase font-sans tracking-wide">Dettagli</a>
+                    <a href="#mappa" class="text-gray-600 hover:text-brand-blue font-bold text-sm uppercase font-sans tracking-wide">Mappa</a>
+                    <a href="#priorita" class="px-6 py-2.5 bg-brand-blue text-white rounded-full font-bold text-sm hover:bg-brand-dark transition-colors font-sans shadow-lg">Il Futuro</a>
                 </div>
+                <button onclick="document.getElementById('login-modal').classList.remove('hidden')" class="lg:hidden text-gray-500">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+                </button>
             </div>
         </div>
     </nav>
 
-    <!-- HERO SECTION -->
-    <header id="hero" class="relative w-full h-[100vh] flex items-center justify-center overflow-hidden bg-brand-dark">
-        <img src="https://images.unsplash.com/photo-1449824913929-4bd52643881a?q=80&w=2070&auto=format&fit=crop" class="hero-video-bg" alt="Panorama Avigliano">
+    <!-- SECTION: HERO -->
+    <header id="sec-hero" class="relative w-full h-[90vh] min-h-[600px] flex items-center justify-center overflow-hidden bg-brand-dark admin-selectable" onclick="Admin.handleClick('hero')">
+        <img id="hero-bg-img" src="" class="absolute inset-0 w-full h-full object-cover opacity-50 mix-blend-overlay will-change-transform" alt="Avigliano Umbro Panorama">
         <div class="absolute inset-0 bg-gradient-to-t from-brand-dark via-brand-blue/30 to-black/40 z-0"></div>
-
         <div class="relative z-10 container mx-auto px-6 text-center mt-10">
-            <div class="inline-block bg-white/10 backdrop-blur-md border border-white/20 rounded-full px-6 py-2 mb-6 animate-fade-in-down">
-                <span class="text-brand-accent font-bold uppercase tracking-widest text-xs flex items-center gap-2">
-                    <span class="w-2 h-2 rounded-full bg-green-400 animate-pulse"></span>
-                    Versione 5.1 Live
-                </span>
+            <div class="inline-block bg-white/10 backdrop-blur-md border border-white/20 rounded-full px-6 py-2 mb-6 animate-fade-in">
+                <span class="text-brand-accent font-bold uppercase tracking-widest text-xs">Rendiconto di Mandato 2022–2027</span>
             </div>
-            
-            <h1 id="hero-title-text" class="editable-text font-serif font-bold text-5xl md:text-8xl text-white leading-tight mb-6 drop-shadow-lg">
-                PROMESSE<br>
-                <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-accent to-yellow-200">MANTENUTE.</span>
-            </h1>
-            
-            <p id="hero-desc-text" class="editable-text font-sans text-gray-200 text-lg md:text-xl max-w-2xl mx-auto mb-10 font-light leading-relaxed">
-                Non parole, ma opere. Esplora il rendiconto interattivo del lavoro svolto per Avigliano Umbro e partecipa alla costruzione del futuro.
-            </p>
-
-            <div class="flex flex-col md:flex-row gap-4 justify-center">
-                <button onclick="gsap.to(window, {duration: 1, scrollTo: '#progetti'})" class="bg-brand-accent hover:bg-yellow-500 text-brand-dark font-bold py-4 px-10 rounded-full shadow-[0_0_20px_rgba(251,191,36,0.5)] transition-all transform hover:scale-105">
-                    Esplora i Risultati
-                </button>
-            </div>
-            
-            <!-- Scroll Indicator -->
-            <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 text-white/50 animate-bounce-slow">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path></svg>
-            </div>
+            <h1 id="hero-title" class="font-serif font-bold text-5xl md:text-7xl lg:text-8xl text-white leading-tight mb-6 drop-shadow-2xl"></h1>
+            <p id="hero-desc" class="font-sans text-gray-200 text-lg md:text-xl max-w-2xl mx-auto mb-10 font-light leading-relaxed opacity-90"></p>
+            <button onclick="gsap.to(window, {duration: 1, scrollTo: '#confronto'})" class="bg-brand-accent text-brand-dark font-bold py-4 px-10 rounded-full shadow-lg hover:scale-105 transition-transform font-sans border-2 border-transparent hover:border-white/20">Esplora i Risultati</button>
         </div>
     </header>
 
-    <!-- STATS DASHBOARD -->
-    <section id="dashboard-stats" class="relative -mt-16 z-20 px-4">
-        <div class="container mx-auto">
-            <div class="bg-white rounded-2xl shadow-xl p-6 md:p-8 border border-gray-100 grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
-                <div class="glass-card p-4 rounded-xl bg-slate-50 border border-slate-100 group">
-                    <p class="text-4xl font-bold text-brand-blue mb-1 group-hover:scale-110 transition-transform" id="stat-total">0</p>
-                    <p class="text-xs md:text-sm text-gray-500 uppercase font-bold tracking-wider">Progetti Totali</p>
-                </div>
-                <div class="glass-card p-4 rounded-xl bg-green-50 border border-green-100 group">
-                    <p class="text-4xl font-bold text-green-600 mb-1 group-hover:scale-110 transition-transform" id="stat-completed">0</p>
-                    <p class="text-xs md:text-sm text-gray-500 uppercase font-bold tracking-wider">Opere Concluse</p>
-                </div>
-                 <div class="glass-card p-4 rounded-xl bg-amber-50 border border-amber-100 group">
-                    <p class="text-4xl font-bold text-amber-600 mb-1 group-hover:scale-110 transition-transform" id="stat-wip">0</p>
-                    <p class="text-xs md:text-sm text-gray-500 uppercase font-bold tracking-wider">Cantieri Aperti</p>
-                </div>
-                 <div class="glass-card p-4 rounded-xl bg-blue-50 border border-blue-100 group">
-                    <p class="text-3xl md:text-4xl font-bold text-brand-dark mb-1 whitespace-nowrap group-hover:scale-105 transition-transform" id="stat-money">€0</p>
-                    <p class="text-xs md:text-sm text-gray-500 uppercase font-bold tracking-wider">Investimenti</p>
-                </div>
+    <!-- SECTION: STATS -->
+    <section id="sec-stats" class="relative -mt-20 z-20 px-4 admin-selectable" onclick="Admin.handleClick('stats')">
+        <div class="container mx-auto max-w-6xl">
+            <div class="bg-white rounded-theme shadow-theme p-8 border border-gray-100 grid grid-cols-2 md:grid-cols-4 gap-8 text-center divide-x divide-gray-100">
+                <div class="group"><p class="text-5xl font-bold text-brand-blue mb-2 group-hover:scale-110 transition-transform" id="stat-total">0</p><p class="text-xs text-gray-500 uppercase font-bold tracking-wider">Progetti Totali</p></div>
+                <div class="group"><p class="text-5xl font-bold text-green-600 mb-2 group-hover:scale-110 transition-transform" id="stat-completed">0</p><p class="text-xs text-gray-500 uppercase font-bold tracking-wider">Conclusi</p></div>
+                <div class="group"><p class="text-5xl font-bold text-amber-600 mb-2 group-hover:scale-110 transition-transform" id="stat-wip">0</p><p class="text-xs text-gray-500 uppercase font-bold tracking-wider">Cantieri Attivi</p></div>
+                <div class="group"><p class="text-4xl font-bold text-brand-dark mb-2 group-hover:scale-110 transition-transform" id="stat-money">€0</p><p class="text-xs text-gray-500 uppercase font-bold tracking-wider">Investimenti</p></div>
             </div>
         </div>
     </section>
 
-    <!-- PROJECTS SECTION -->
-    <section id="progetti" class="py-20 bg-gray-50 min-h-screen">
-        <div class="container mx-auto px-6">
-            
-            <div class="flex flex-col md:flex-row justify-between items-end mb-8 gap-4">
-                <div>
-                    <h2 class="font-serif font-bold text-4xl text-brand-dark mb-2">Il Rendiconto</h2>
-                    <p class="text-gray-500 max-w-md text-sm md:text-base">Esplora i risultati filtrando per anno, stato o località.</p>
-                </div>
-                
-                <div class="w-full md:w-auto relative group">
-                    <input type="text" id="search-input" placeholder="Cerca opera, via, argomento..." class="w-full md:w-80 pl-10 pr-4 py-3 rounded-full border border-gray-300 focus:border-brand-blue focus:ring-2 focus:ring-blue-100 outline-none text-sm transition-all shadow-sm group-hover:shadow-md">
-                    <svg class="w-4 h-4 text-gray-400 absolute left-3.5 top-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
-                    <!-- Loading Spinner -->
-                    <div id="search-loader" class="loader absolute right-4 top-3.5 opacity-0 transition-opacity"></div>
-                </div>
-            </div>
-
-            <!-- Toolbar -->
-            <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-100 mb-6 space-y-4 md:space-y-0 sticky top-24 z-30 transition-shadow" id="filter-bar">
-                <div class="flex flex-col md:flex-row md:items-center gap-4 justify-between">
-                    <div class="flex flex-wrap gap-3 items-center flex-1" id="dynamic-filters">
-                        <!-- Selects injected by JS -->
-                    </div>
-
-                    <div class="flex bg-gray-100 rounded-lg p-1">
-                        <button id="btn-view-cards" onclick="UI.setView('cards')" class="px-3 py-1.5 rounded-md text-xs font-bold transition-all flex items-center gap-1 shadow-sm bg-white text-brand-dark">Card</button>
-                        <button id="btn-view-list" onclick="UI.setView('list')" class="px-3 py-1.5 rounded-md text-xs font-bold text-gray-500 hover:text-gray-800 transition-all flex items-center gap-1">Elenco</button>
-                    </div>
-                </div>
-
-                <div class="flex flex-wrap gap-2 border-t border-gray-100 pt-3" id="category-filters">
-                    <!-- Categories injected by JS -->
-                </div>
-            </div>
-
-            <!-- Count Feedback -->
-            <div class="flex justify-between items-center mb-4 px-2">
-                <span id="results-count" class="text-xs font-bold text-brand-blue bg-blue-50 px-2 py-1 rounded-md">Caricamento...</span>
-                <span class="text-[10px] text-gray-400 uppercase tracking-widest font-bold">Dati aggiornati in tempo reale</span>
-            </div>
-
-            <!-- Grid -->
-            <div id="view-container" class="min-h-[300px] transition-all duration-300"></div>
-        </div>
-    </section>
-
-    <!-- MAP SECTION -->
-    <section id="mappa" class="py-16 bg-white border-t border-gray-100">
-        <div class="container mx-auto px-6">
-            <div class="flex flex-col md:flex-row justify-between items-end mb-8">
-                <div>
-                    <h2 class="font-serif font-bold text-3xl text-brand-dark">Mappa Interventi</h2>
-                    <p class="text-gray-500 mt-1">Geolocalizzazione delle opere sul territorio.</p>
-                </div>
-                <!-- Legend -->
-                <div class="flex gap-3 text-[10px] font-bold uppercase mt-4 md:mt-0">
-                    <span class="flex items-center gap-1"><span class="w-3 h-3 rounded-full bg-area-social"></span>Sociale</span>
-                    <span class="flex items-center gap-1"><span class="w-3 h-3 rounded-full bg-area-works"></span>Opere</span>
-                    <span class="flex items-center gap-1"><span class="w-3 h-3 rounded-full bg-area-env"></span>Ambiente</span>
-                    <span class="flex items-center gap-1"><span class="w-3 h-3 rounded-full bg-area-culture"></span>Cultura</span>
-                </div>
-            </div>
-            
-            <div class="relative w-full h-[400px] md:h-[550px] bg-slate-100 rounded-2xl overflow-hidden border border-gray-200 shadow-inner group">
-                <div class="absolute inset-0 bg-[url('https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/Umbria_location_map.svg/1200px-Umbria_location_map.svg.png')] bg-cover bg-center opacity-30 grayscale transition-all duration-700"></div>
-                <div id="map-markers-container" class="absolute inset-0 z-10"></div>
-            </div>
-        </div>
-    </section>
-
-    <!-- CANTIERI SECTION -->
-    <section id="lavori-in-corso" class="py-24 blueprint-bg text-white relative border-t-4 border-yellow-400">
-        <div class="absolute top-0 left-0 w-full h-2 bg-yellow-400 repeating-linear-gradient(45deg, transparent, transparent 10px, #000 10px, #000 20px)"></div>
-        
-        <div class="container mx-auto px-6 relative z-10">
-            <div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-10 gap-6">
-                <div>
-                    <div class="inline-block bg-yellow-400 text-black font-bold px-3 py-1 rounded uppercase text-xs tracking-wider animate-pulse shadow-lg mb-2">Lavori in Corso</div>
-                    <h2 class="font-serif font-bold text-3xl md:text-4xl">Cantieri & Programmazione</h2>
-                    <p id="txt-wip-intro" class="editable-text text-blue-200 mt-2 max-w-xl text-sm leading-relaxed">
-                        Monitoraggio trasparente dello stato di avanzamento delle opere pubbliche.
-                    </p>
-                </div>
-                
-                <div class="flex gap-2">
-                    <button onclick="UI.filterCantieri('all')" class="cantiere-filter active px-4 py-2 rounded-lg border border-white/30 text-xs font-bold hover:bg-white/10 transition-colors bg-white/20">Tutti</button>
-                    <button onclick="UI.filterCantieri('in_corso')" class="cantiere-filter px-4 py-2 rounded-lg border border-white/30 text-xs font-bold hover:bg-white/10 transition-colors">In Corso</button>
-                    <button onclick="UI.filterCantieri('programmato')" class="cantiere-filter px-4 py-2 rounded-lg border border-white/30 text-xs font-bold hover:bg-white/10 transition-colors">Programmati</button>
-                </div>
-            </div>
-            
-            <div id="wip-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
-        </div>
-    </section>
-
-    <!-- PRIORITIES SECTION -->
-    <section id="priorita" class="py-24 bg-white relative overflow-hidden">
-        <div class="absolute top-0 right-0 w-[500px] h-[500px] bg-brand-accent/5 rounded-full blur-3xl -z-10"></div>
-        <div class="container mx-auto px-6">
+    <!-- SECTION: CONFRONTO PROGRAMMA VS RISULTATI (CORE) -->
+    <section id="confronto" class="py-24 bg-gray-50 admin-selectable" onclick="Admin.handleClick('areas')">
+        <div class="container mx-auto px-6 max-w-6xl">
             <div class="text-center mb-16">
-                <span class="text-brand-blue font-bold tracking-widest uppercase text-xs">Partecipazione Attiva</span>
-                <h2 class="font-serif font-bold text-4xl text-brand-dark mt-2 mb-4">Le Priorità del Domani</h2>
-                <p class="text-gray-500 max-w-2xl mx-auto leading-relaxed">
-                    Il tuo voto aiuta a definire l'agenda politica del prossimo mandato. 
-                    I dati sono salvati localmente sul tuo dispositivo.
-                </p>
+                <h2 class="font-serif font-bold text-4xl text-brand-dark mb-4">Promesse vs Realtà</h2>
+                <p class="text-gray-600 max-w-2xl mx-auto text-lg">Un confronto trasparente tra quanto scritto nel Programma Elettorale 2021 e quanto effettivamente realizzato per la comunità.</p>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="priority-grid"></div>
-            
-            <div class="mt-16 bg-slate-50 rounded-2xl p-8 border border-gray-100 max-w-4xl mx-auto">
-                <h4 class="text-center font-bold text-brand-dark mb-6">Trend delle Preferenze</h4>
-                <div id="priority-chart" class="space-y-4"></div>
+            <div id="areas-container" class="space-y-12">
+                <!-- Areas generated by JS -->
             </div>
         </div>
     </section>
 
-    <!-- CHI SONO SECTION (TIMELINE) -->
-    <section id="chi-sono" class="py-24 bg-brand-dark text-white relative">
+    <!-- SECTION: CANTIERI IN CORSO (AGORÀ) -->
+    <section id="cantieri" class="py-20 bg-brand-dark text-white relative overflow-hidden admin-selectable" onclick="Admin.handleClick('ongoing')">
+        <div class="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-gray-700 via-gray-900 to-black"></div>
         <div class="container mx-auto px-6 relative z-10">
-            <div class="text-center mb-12">
-                <span class="text-brand-accent font-bold tracking-widest uppercase text-xs">Il Mio Percorso</span>
-                <h2 class="font-serif font-bold text-4xl mt-2">Al Servizio della Comunità</h2>
+            <div class="flex flex-col md:flex-row gap-12 items-center">
+                <div class="md:w-1/2">
+                    <div class="inline-block bg-amber-500 text-black text-xs font-bold px-3 py-1 rounded mb-4 animate-pulse">🚧 LAVORI IN CORSO</div>
+                    <h2 class="font-serif font-bold text-4xl mb-6">Il Futuro Centro Agorà</h2>
+                    <div id="ongoing-container">
+                        <!-- Content JS -->
+                    </div>
+                </div>
+                <div class="md:w-1/2 w-full h-80 bg-gray-800 rounded-theme border border-gray-700 flex items-center justify-center relative overflow-hidden group">
+                    <img src="https://images.unsplash.com/photo-1503387762-592deb58ef4e?q=80&w=1000" class="absolute inset-0 w-full h-full object-cover opacity-50 group-hover:scale-105 transition-transform duration-700" alt="Cantiere">
+                    <div class="relative z-10 text-center">
+                        <p class="text-4xl font-bold text-brand-accent mb-2">65%</p>
+                        <p class="text-sm text-gray-300 uppercase tracking-widest">Avanzamento Lavori</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION: DETTAGLIO PROGETTI -->
+    <section id="progetti" class="py-20 bg-white admin-selectable" onclick="Admin.handleClick('projects')">
+        <div class="container mx-auto px-6">
+            <div class="flex flex-col md:flex-row justify-between items-end mb-10 gap-4 border-b border-gray-100 pb-6">
+                <div>
+                    <h2 class="font-serif font-bold text-3xl text-brand-dark mb-2">Esplora i Dettagli</h2>
+                    <p class="text-gray-500 font-sans text-sm">Naviga tra le schede tecniche di ogni intervento.</p>
+                </div>
+                <div class="flex gap-4 w-full md:w-auto">
+                    <input type="text" id="search-input" placeholder="Cerca intervento..." class="w-full md:w-64 px-4 py-2 rounded-lg border bg-gray-50 focus:bg-white focus:border-brand-blue outline-none transition-colors text-sm" onclick="event.stopPropagation()">
+                </div>
             </div>
             
-            <div class="relative max-w-4xl mx-auto py-8">
-                <div class="timeline-line bg-gray-700"></div>
-                
-                <div class="relative flex flex-col md:flex-row items-start md:items-center gap-6 mb-12 group">
-                    <div class="md:w-1/2 md:text-right">
-                        <span class="text-brand-accent font-bold text-xl">2017</span>
-                        <h3 class="font-bold text-2xl">Consigliere Comunale</h3>
-                        <p class="text-gray-400 text-sm mt-2">Inizio del servizio attivo con deleghe alle politiche giovanili e associazionismo.</p>
-                    </div>
-                    <div class="absolute left-[15px] md:left-1/2 transform -translate-x-1/2 w-4 h-4 bg-brand-accent rounded-full border-4 border-brand-dark z-10"></div>
-                    <div class="md:w-1/2 md:pl-8"></div>
-                </div>
+            <div class="flex flex-wrap gap-2 mb-8 justify-center md:justify-start" id="category-filters" onclick="event.stopPropagation()"></div>
 
-                <div class="relative flex flex-col md:flex-row items-start md:items-center gap-6 mb-12 group">
-                    <div class="md:w-1/2 md:text-right order-2 md:order-1 md:pl-8"></div>
-                    <div class="absolute left-[15px] md:left-1/2 transform -translate-x-1/2 w-4 h-4 bg-brand-blue rounded-full border-4 border-brand-dark z-10"></div>
-                    <div class="md:w-1/2 order-1 md:order-2">
-                        <span class="text-brand-blue font-bold text-xl">2022</span>
-                        <h3 class="font-bold text-2xl">Vice Sindaco</h3>
-                        <p class="text-gray-400 text-sm mt-2">Gestione diretta delle opere pubbliche e coordinamento fondi PNRR.</p>
-                    </div>
-                </div>
+            <div id="view-container" class="min-h-[300px]" onclick="event.stopPropagation()"></div>
+        </div>
+    </section>
 
-                <div class="relative flex flex-col md:flex-row items-start md:items-center gap-6 group">
-                    <div class="md:w-1/2 md:text-right">
-                        <span class="text-white font-bold text-xl">2027</span>
-                        <h3 class="font-bold text-2xl">Verso il Futuro</h3>
-                        <p class="text-gray-400 text-sm mt-2">Pronto a mettere a frutto l'esperienza maturata per una nuova stagione di crescita.</p>
-                    </div>
-                    <div class="absolute left-[15px] md:left-1/2 transform -translate-x-1/2 w-6 h-6 bg-white rounded-full border-4 border-brand-dark z-10 animate-pulse"></div>
-                    <div class="md:w-1/2 md:pl-8"></div>
+    <!-- SECTION: PROSSIMI PASSI -->
+    <section id="futuro" class="py-16 bg-slate-50 border-t border-gray-200 admin-selectable" onclick="Admin.handleClick('future')">
+        <div class="container mx-auto px-6 max-w-4xl">
+            <h2 class="font-serif font-bold text-3xl text-center text-brand-dark mb-10">Cose su cui lavorare ancora</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6" id="future-container">
+                <!-- JS Generated -->
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION: MAPPA -->
+    <section id="mappa" class="py-16 bg-white border-t border-gray-100 admin-selectable" onclick="Admin.handleClick('map')">
+        <div class="container mx-auto px-6">
+            <h2 class="font-serif font-bold text-3xl text-brand-dark mb-6">Mappa Interventi</h2>
+            <div class="relative w-full h-[500px] bg-slate-100 rounded-theme overflow-hidden border border-gray-200 shadow-inner group">
+                <div class="absolute inset-0 bg-[url('https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/Umbria_location_map.svg/1200px-Umbria_location_map.svg.png')] bg-cover bg-center opacity-40 grayscale group-hover:grayscale-0 transition-all duration-500"></div>
+                <div id="map-markers-container" class="absolute inset-0"></div>
+                <div class="absolute bottom-4 left-4 bg-white/90 p-3 rounded shadow text-xs">
+                    <div class="flex items-center gap-2 mb-1"><span class="w-3 h-3 rounded-full bg-amber-500"></span> Opere</div>
+                    <div class="flex items-center gap-2 mb-1"><span class="w-3 h-3 rounded-full bg-blue-500"></span> Sociale</div>
+                    <div class="flex items-center gap-2"><span class="w-3 h-3 rounded-full bg-green-500"></span> Cultura</div>
                 </div>
             </div>
+        </div>
+    </section>
+
+    <!-- SECTION: TIMELINE CHI SONO -->
+    <section id="chi-sono" class="py-20 bg-slate-50 admin-selectable" onclick="Admin.handleClick('timeline')">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-12">
+                <h2 class="font-serif font-bold text-3xl text-brand-dark">Il mio percorso</h2>
+                <div class="w-16 h-1 bg-brand-accent mx-auto mt-4"></div>
+            </div>
+            <div class="relative max-w-4xl mx-auto">
+                <div class="absolute top-1/2 left-0 w-full h-0.5 bg-gray-300 -translate-y-1/2 hidden md:block"></div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center relative z-10" id="timeline-container">
+                    <!-- JS Generated -->
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION: PRIORITA -->
+    <section id="priorita" class="py-20 bg-brand-blue text-white relative overflow-hidden admin-selectable" onclick="Admin.handleClick('priorities')">
+        <div class="container mx-auto px-6 relative z-10 text-center">
+            <h2 class="font-serif font-bold text-3xl mb-2">La tua opinione conta</h2>
+            <p class="mb-10 text-blue-100">Seleziona le priorità per il prossimo mandato.</p>
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 max-w-5xl mx-auto" id="priority-grid"></div>
         </div>
     </section>
 
     <!-- FOOTER -->
-    <footer class="bg-gray-900 text-white py-12 border-t border-gray-800 relative z-10">
+    <footer class="bg-brand-dark text-white py-12 border-t border-gray-800 text-center md:text-left admin-selectable" onclick="Admin.handleClick('footer')">
         <div class="container mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-6">
-            <div class="text-center md:text-left">
-                <h4 class="font-bold text-xl tracking-wide">Avigliano Umbro 2027</h4>
-                <p class="text-gray-400 text-sm mt-1">Avanti Insieme. Prima di Tutto.</p>
+            <div>
+                <h4 class="font-bold text-2xl font-serif text-brand-accent mb-2">Avigliano Umbro</h4>
+                <p class="text-gray-400 text-sm max-w-xs">Lista Civica "Avigliano – Prima di Tutto"<br>Rendiconto di fine mandato 2022–2027</p>
             </div>
             <div class="flex gap-4">
-                <button onclick="document.getElementById('login-modal').classList.remove('hidden')" class="px-4 py-2 border border-gray-700 rounded hover:bg-gray-700 text-xs transition-colors">Area Riservata</button>
+                 <button onclick="event.stopPropagation(); document.getElementById('login-modal').classList.remove('hidden')" class="text-xs text-gray-600 hover:text-white border border-gray-700 px-3 py-1 rounded hover:bg-gray-800 transition-colors">Admin Area</button>
             </div>
         </div>
     </footer>
 
-    <!-- JAVASCRIPT LOGIC MODULES -->
+    <!-- LOGIC -->
     <script>
-        // --- DATA MODULE ---
         const Data = {
             state: {
-                schemaVersion: '5.1',
-                projects: [],
-                votes: {},
-                settings: {
-                    years: ['2022', '2023', '2024', '2025', '2026', '2027'],
-                    locations: ['Avigliano', 'Sismano', 'Dunarobba', 'Toscolano', 'Santa Restituta'],
-                    categories: [
-                        { id: 'sociale', label: 'Sociale', color: 'blue' },
-                        { id: 'cultura', label: 'Cultura', color: 'green' },
-                        { id: 'opere', label: 'Opere Pubbliche', color: 'yellow' },
-                        { id: 'ambiente', label: 'Ambiente', color: 'orange' },
-                        { id: 'amministrazione', label: 'Amministrazione', color: 'slate' }
-                    ]
-                },
-                priorities: [
-                    { id: 'borghi', title: 'Borghi Digitali', desc: 'Wi-Fi e coworking diffuso', icon: '📡' },
-                    { id: 'green', title: 'Comunità Energetiche', desc: 'Energia pulita condivisa', icon: '☀️' },
-                    { id: 'turismo', title: 'Turismo Lento', desc: 'Sentieri e cicloturismo', icon: '🥾' },
-                    { id: 'giovani', title: 'Spazio Giovani', desc: 'Budget partecipativo under 30', icon: '🚀' },
-                    { id: 'sicurezza', title: 'Sicurezza', desc: 'Videosorveglianza smart', icon: '🛡️' },
-                    { id: 'agro', title: 'Filiera Corta', desc: 'Supporto produttori locali', icon: '🥕' }
-                ],
+                theme: 'classic',
                 texts: {
-                    heroTitle: 'PROMESSE<br><span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-accent to-yellow-200">MANTENUTE.</span>',
-                    heroDesc: 'Non parole, ma opere. Esplora il rendiconto interattivo del lavoro svolto per Avigliano Umbro.',
-                    wipIntro: 'Monitoraggio trasparente dello stato di avanzamento delle opere.'
-                }
-            },
-            
-            init() {
-                const saved = localStorage.getItem('avigliano_db_v5');
-                if (saved) {
-                    const parsed = JSON.parse(saved);
-                    // Check version for migration
-                    if(parsed.schemaVersion === '5.1') {
-                        this.state = { ...this.state, ...parsed };
-                    } else {
-                        // Keep user votes/settings but refresh default projects if they are old default ones
-                        this.state.votes = parsed.votes || {};
-                        this.state.priorities = parsed.priorities || this.state.priorities;
-                        this.state.settings = parsed.settings || this.state.settings;
-                        // Always force reload of defaults for this demo update to ensure real data appears
-                        if(!parsed.projects || parsed.projects.length < 5) this.loadDefaults(); 
-                        else this.state.projects = parsed.projects;
-                        this.save();
+                    heroTitle: 'PROMESSE<br><span class="text-brand-accent">MANTENUTE.</span>',
+                    heroDesc: 'Cinque anni di amministrazione concreta. Un confronto trasparente tra il programma elettorale e i risultati raggiunti per Avigliano Umbro.',
+                    heroImg: 'https://images.unsplash.com/photo-1449824913929-4bd52643881a?q=80&w=2070&auto=format&fit=crop'
+                },
+                timeline: [
+                    { step: 1, title: "Consigliere", year: "2017 - 2022", desc: "L'inizio dell'impegno per le frazioni." },
+                    { step: 2, title: "Vice Sindaco", year: "2022 - 2027", desc: "Responsabilità e opere pubbliche." },
+                    { step: 3, title: "Candidato", year: "2027", desc: "Una nuova visione per Avigliano." }
+                ],
+                // CORE DATA: COMPARISON PROGRAM VS RESULTS
+                areas: [
+                    {
+                        id: 'sociale', name: 'Politiche Sociali', color: 'bg-blue-50 border-blue-200', titleColor: 'text-blue-700', icon: '🟦',
+                        promises: "Sostegno alla natalità e alla prima infanzia.\nPolitiche di Welfare locale per giovani e famiglie.\nAttenzione alle categorie fragili e terza età.",
+                        results: "Attivazione servizio educativo 'Borgo 0–6' a Sismano.\nCorsi su genitorialità e adolescenza.\nAmmortizzazione aumenti Scuolabus e Mensa.\nBando case popolari e assegnazioni.\nAvvio Consulta Comunale dei Giovani.\nProgetti di inclusione sociale per anziani."
+                    },
+                    {
+                        id: 'cultura', name: 'Cultura e Turismo', color: 'bg-green-50 border-green-200', titleColor: 'text-green-700', icon: '🟩',
+                        promises: "Rilancio della biblioteca comunale.\nTurismo green e sostenibile.\nValorizzazione Foresta Fossile e Grotta Bella.",
+                        results: "Riapertura Biblioteca Bettelli con coworking.\nProgetto 'Il filo della tradizione'.\nSperimentazione Cineforum comunale.\nFesta della Musica ampliata.\nNuova segnaletica turistica QR.\nBando 'Bici in Comune' (80k€)."
+                    },
+                    {
+                        id: 'opere', name: 'Opere Pubbliche', color: 'bg-amber-50 border-amber-200', titleColor: 'text-amber-700', icon: '🟫',
+                        promises: "Manutenzione strade e cura dell'esistente.\nRiqualificazione centri storici e parchi.\nCura dei cimiteri e arredo urbano.",
+                        results: "Asfaltatura Via Levi e Via Salvemini.\nStrada del Pergolone e S. Restituta.\nRiqualificazione Piazze Teatro e Comunità.\n14 Nuovi parcheggi in centro.\nPotenziamento Parco Piacenti.\nNuovi loculi nei cimiteri."
+                    },
+                    {
+                        id: 'ambiente', name: 'Ambiente', color: 'bg-orange-50 border-orange-200', titleColor: 'text-orange-700', icon: '🟧',
+                        promises: "Introduzione tariffa puntuale (TARIC).\nEfficientamento energetico.\nTutela ambientale.",
+                        results: "Introduzione TARIC.\nCompletamento Teleriscaldamento.\nEfficientamento scuole Dunarobba.\nLED su pubblica illuminazione.\nBonus 300€ adozioni cani."
+                    },
+                    {
+                        id: 'admin', name: 'Amm.ne & Sicurezza', color: 'bg-slate-50 border-slate-200', titleColor: 'text-slate-700', icon: '🟦',
+                        promises: "Sportello del cittadino e digitalizzazione.\nSicurezza e Polizia locale.\nSupporto al commercio.",
+                        results: "Attivazione Sportello del Cittadino.\nDigitalizzazione SUAPE.\nNuovo sito web PNRR.\nContributo 28k€ al commercio.\nRicostituzione Polizia Municipale.\nAcquisizione Ex Cottolengo."
                     }
-                } else {
-                    this.loadDefaults();
+                ],
+                ongoingProjects: [
+                    { id: 'agora', title: 'Centro Polifunzionale “Agorà”', desc: 'Realizzazione di uno spazio polivalente per eventi, incontri, attività sociali e culturali. Un nuovo luogo di aggregazione per giovani e famiglie.', progress: 65, status: 'Cantiere in corso' }
+                ],
+                futureGoals: [
+                    "Completare la piena fruibilità turistica della Grotta Bella.",
+                    "Rafforzare i servizi domiciliari per la terza età.",
+                    "Nuovo piano asfalti per le strade rurali.",
+                    "Potenziamento della videosorveglianza nelle frazioni."
+                ],
+                // DETAILED PROJECTS FOR GRID VIEW (Subset/Detail)
+                projects: [
+                    { id: 1, title: "Parcheggio Via Levi", category: "opere", year: "2023", stato: "concluso", desc: "Nuova area di sosta e riqualificazione viabilità.", imgAfter: "https://images.unsplash.com/photo-1590674899505-1c5c41951f89?q=80&w=800", imgBefore: "https://images.unsplash.com/photo-1533552026196-1c73a6693895?q=80&w=800" },
+                    { id: 2, title: "Biblioteca Bettelli", category: "cultura", year: "2022", stato: "concluso", desc: "Riapertura con spazi coworking e nuovi arredi.", imgAfter: "https://images.unsplash.com/photo-1521587760476-6c12a4b040da?q=80&w=800" },
+                    { id: 3, title: "Borgo 0-6 Sismano", category: "sociale", year: "2023", stato: "concluso", desc: "Servizio educativo sperimentale per l'infanzia.", imgAfter: "https://images.unsplash.com/photo-1587654780291-39c940483713?q=80&w=800" },
+                    { id: 4, title: "Ex Cottolengo", category: "amministrazione", year: "2026", stato: "in_corso", desc: "Acquisizione immobile storico (477k€).", imgAfter: "https://images.unsplash.com/photo-1564501049412-61c2a3083791?q=80&w=800" },
+                    { id: 5, title: "Piazza del Teatro", category: "opere", year: "2024", stato: "concluso", desc: "Nuova pavimentazione, fontana e illuminazione.", imgAfter: "https://images.unsplash.com/photo-1570168007204-dfb528c6958f?q=80&w=800" }
+                ],
+                priorities: [
+                    { id: 'p1', title: 'Manutenzione Strade', icon: '🛣️' },
+                    { id: 'p2', title: 'Supporto Giovani', icon: '🎓' },
+                    { id: 'p3', title: 'Turismo Lento', icon: '🚲' },
+                    { id: 'p4', title: 'Sicurezza', icon: '🛡️' },
+                    { id: 'p5', title: 'Eventi Culturali', icon: '🎭' },
+                    { id: 'p6', title: 'Energia Green', icon: '⚡' }
+                ]
+            },
+            init() {
+                const s = localStorage.getItem('avigliano_v8_db');
+                if(s) {
+                    const parsed = JSON.parse(s);
+                    // Merge strategies to ensure new fields exist if migrating from old version
+                    this.state = { ...this.state, ...parsed }; 
+                    if(!this.state.areas) this.state.areas = this.defaults.areas; // Fallback
                 }
+                this.renderAll();
+                this.setupAnimations();
             },
-
-            loadDefaults() {
-                // REAL DATA POPULATION
-                this.state.projects = [
-                     // SOCIALE
-                     { id: 101, title: "Borgo 0-6 Sismano", category: "sociale", year: "2023", localita: "Sismano", importo: 45000, fonte: "Comune", stato: "concluso", desc: "Attivato servizio educativo per la prima infanzia a Sismano.", promise: "Sostegno alla natalità e servizi infanzia.", imgAfter: "https://images.unsplash.com/photo-1587654780291-39c940483713?q=80&w=800" },
-                     { id: 102, title: "Consulta dei Giovani", category: "sociale", year: "2022", localita: "Avigliano", stato: "concluso", desc: "Avviata la Consulta con incontri istituzionali regolari.", promise: "Attenzione alle problematiche giovanili." },
-                     { id: 103, title: "Bando Case Popolari", category: "sociale", year: "2023", localita: "Comune", stato: "concluso", desc: "Pubblicazione bando e assegnazione alloggi.", promise: "Aiuto alle famiglie numerose e fragili." },
-                     
-                     // OPERE PUBBLICHE
-                     { id: 301, title: "Asfaltatura Via Levi", category: "opere", year: "2023", localita: "Avigliano", importo: 120000, stato: "concluso", desc: "Rifacimento completo del manto stradale e segnaletica.", promise: "Cura delle strade e manutenzione.", imgAfter: "https://images.unsplash.com/photo-1590674899505-1c5c41951f89?q=80&w=800", imgBefore: "https://images.unsplash.com/photo-1533552026196-1c73a6693895?q=80&w=800" },
-                     { id: 302, title: "Riqualificazione Piazza Teatro", category: "opere", year: "2024", localita: "Avigliano", importo: 65000, stato: "concluso", desc: "Nuovi lampioni, aiuole e fontana restaurata.", promise: "Miglioramento arredo urbano." },
-                     { id: 303, title: "Acquisizione Ex Cottolengo", category: "opere", year: "2024", localita: "Avigliano", importo: 477000, fonte: "PNRR", stato: "in_corso", progress: 30, faseCantiere: "Progettazione esecutiva", desc: "Acquisizione immobile storico per fini sociali.", promise: "Restituire il Cottolengo alla comunità." },
-                     { id: 304, title: "Centro Agorà", category: "opere", year: "2025", localita: "Avigliano", importo: 850000, fonte: "Regione", stato: "in_corso", progress: 65, faseCantiere: "Impiantistica", desc: "Nuovo centro polifunzionale per grandi eventi.", promise: "Realizzazione struttura polivalente." },
-                     
-                     // AMBIENTE
-                     { id: 401, title: "Tariffa Puntuale (TARIC)", category: "ambiente", year: "2023", localita: "Comune", stato: "concluso", desc: "Introdotto sistema premiante per chi ricicla.", promise: "Potenziamento differenziata e risparmio cittadini." },
-                     { id: 402, title: "Illuminazione LED", category: "ambiente", year: "2022", localita: "Tutto il territorio", importo: 200000, stato: "concluso", desc: "Efficientamento energetico pubblica illuminazione.", promise: "Comune amico dell'ambiente." },
-                     
-                     // CULTURA
-                     { id: 201, title: "Biblioteca M. Emilia Bettelli", category: "cultura", year: "2022", localita: "Avigliano", stato: "concluso", desc: "Riapertura con spazi coworking e co-studying.", promise: "Nuova vita alla biblioteca comunale." },
-                     { id: 202, title: "Foresta Fossile", category: "cultura", year: "2024", localita: "Dunarobba", importo: 150000, stato: "programmato", progress: 10, faseCantiere: "In attesa fondi", desc: "Riqualificazione centro paleontologico.", promise: "Promozione internazionale sito unico." }
-                ];
-                this.save();
-            },
-
-            save() {
-                localStorage.setItem('avigliano_db_v5', JSON.stringify(this.state));
-            },
-
-            vote(id) {
-                if(!this.state.votes[id]) this.state.votes[id] = 0;
-                const isSelected = this.isVoted(id);
-                if(isSelected) {
-                     this.state.votes[id]--;
-                     localStorage.removeItem(`vote_${id}`);
-                } else {
-                     this.state.votes[id]++;
-                     localStorage.setItem(`vote_${id}`, 'true');
-                }
-                this.save();
-                return !isSelected;
-            },
-            
-            isVoted(id) {
-                return localStorage.getItem(`vote_${id}`) === 'true';
+            save() { localStorage.setItem('avigliano_v8_db', JSON.stringify(this.state)); },
+            renderAll() { UI.init(); },
+            setupAnimations() {
+                gsap.registerPlugin(ScrollTrigger);
+                gsap.from("#hero-title", { duration: 1, y: 50, opacity: 0, delay: 0.2 });
+                gsap.from("#hero-desc", { duration: 1, y: 30, opacity: 0, delay: 0.4 });
+                
+                // Animate Area Cards
+                gsap.utils.toArray('.area-card').forEach((card, i) => {
+                    gsap.from(card, {
+                        scrollTrigger: { trigger: card, start: "top 85%" },
+                        y: 50, opacity: 0, duration: 0.6, delay: i * 0.1
+                    });
+                });
             }
         };
 
-        // --- UI MODULE ---
         const UI = {
-            filters: { search: '', year: 'all', status: 'all', location: 'all', category: 'all', view: 'cards' },
-            cantiereFilter: 'all',
-
+            filter: 'all',
             init() {
-                this.renderFilters();
-                this.renderProjects();
-                this.renderMap();
+                this.applyTheme(Data.state.theme);
+                this.renderHero();
                 this.renderStats();
-                this.renderCantieri();
+                this.renderComparison();
+                this.renderOngoing();
+                this.renderProjects();
+                this.renderFuture();
+                this.renderTimeline();
                 this.renderPriorities();
-                this.applyGlobalTexts();
-                this.initTiltEffect();
-                
-                gsap.from("#hero h1", { y: 50, opacity: 0, duration: 1, delay: 0.2 });
-                gsap.from("#hero p", { y: 30, opacity: 0, duration: 1, delay: 0.4 });
-                
-                window.addEventListener('scroll', () => {
-                    const btn = document.getElementById('scroll-top');
-                    if(window.scrollY > 500) btn.classList.add('visible');
-                    else btn.classList.remove('visible');
-                    
-                    const fb = document.getElementById('filter-bar');
-                    if(window.scrollY > document.getElementById('progetti').offsetTop) fb.classList.add('shadow-lg');
-                    else fb.classList.remove('shadow-lg');
-                });
+                this.renderMap();
             },
-            
-            initTiltEffect() {
-                // Apply tilt to glass cards on mousemove
-                document.addEventListener('mousemove', (e) => {
-                    document.querySelectorAll('.glass-card').forEach(card => {
-                        const rect = card.getBoundingClientRect();
-                        const x = e.clientX - rect.left;
-                        const y = e.clientY - rect.top;
-                        
-                        if (x > 0 && x < rect.width && y > 0 && y < rect.height) {
-                            const centerX = rect.width / 2;
-                            const centerY = rect.height / 2;
-                            const rotateX = ((y - centerY) / centerY) * -5; // Max 5deg
-                            const rotateY = ((x - centerX) / centerX) * 5;
-                            
-                            card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.02)`;
-                        } else {
-                            card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) scale(1)';
-                        }
-                    });
-                });
+            applyTheme(t) { document.body.className = `antialiased font-sans theme-${t} ${document.body.classList.contains('admin-mode') ? 'admin-mode' : ''}`; },
+            renderHero() {
+                document.getElementById('hero-title').innerHTML = Data.state.texts.heroTitle;
+                document.getElementById('hero-desc').innerHTML = Data.state.texts.heroDesc;
+                document.getElementById('hero-bg-img').src = Data.state.texts.heroImg;
             },
-
-            handleSlider(e, wrapper) {
-                const rect = wrapper.getBoundingClientRect();
-                const x = (e.touches ? e.touches[0].clientX : e.clientX) - rect.left;
-                let percent = (x / rect.width) * 100;
-                percent = Math.max(0, Math.min(100, percent));
-                
-                wrapper.querySelector('.comparison-before').style.width = `${percent}%`;
-                wrapper.querySelector('.comparison-handle').style.left = `${percent}%`;
+            renderStats() {
+                document.getElementById('stat-total').innerText = 36; // Hardcoded real count from PDF extraction
+                document.getElementById('stat-completed').innerText = 32;
+                document.getElementById('stat-wip').innerText = 4;
+                document.getElementById('stat-money').innerText = "€2M+";
             },
-
-            toast(msg, type = 'info') {
-                const container = document.getElementById('toast-container');
-                const el = document.createElement('div');
-                el.className = `toast ${type}`;
-                el.innerHTML = `<span>${type === 'success' ? '✅' : (type === 'error' ? '❌' : 'ℹ️')}</span><span>${msg}</span>`;
-                container.appendChild(el);
-                setTimeout(() => {
-                    el.style.animation = 'fadeOut 0.3s forwards';
-                    setTimeout(() => el.remove(), 300);
-                }, 3000);
-            },
-
-            applyGlobalTexts() {
-                const t = Data.state.texts;
-                if(t.heroTitle) document.getElementById('hero-title-text').innerHTML = t.heroTitle;
-                if(t.heroDesc) document.getElementById('hero-desc-text').innerHTML = t.heroDesc;
-                if(t.wipIntro) document.getElementById('txt-wip-intro').innerHTML = t.wipIntro;
-            },
-
-            renderFilters() {
-                const df = document.getElementById('dynamic-filters');
-                const cf = document.getElementById('category-filters');
-                
-                let html = `<select onchange="UI.setFilter('year', this.value)" class="bg-gray-50 border border-gray-200 text-gray-700 text-xs font-bold rounded-lg focus:ring-brand-blue focus:border-brand-blue block p-2.5 outline-none">
-                    <option value="all">📅 Tutti gli Anni</option>
-                    ${Data.state.settings.years.map(y => `<option value="${y}">${y}</option>`).join('')}
-                </select>`;
-
-                html += `<select onchange="UI.setFilter('status', this.value)" class="bg-gray-50 border border-gray-200 text-gray-700 text-xs font-bold rounded-lg focus:ring-brand-blue focus:border-brand-blue block p-2.5 outline-none">
-                    <option value="all">⚡ Tutti gli Stati</option>
-                    <option value="concluso">✅ Concluso</option>
-                    <option value="in_corso">🚧 In Corso</option>
-                    <option value="programmato">📅 Programmato</option>
-                </select>`;
-
-                html += `<select onchange="UI.setFilter('location', this.value)" class="bg-gray-50 border border-gray-200 text-gray-700 text-xs font-bold rounded-lg focus:ring-brand-blue focus:border-brand-blue block p-2.5 outline-none">
-                    <option value="all">📍 Tutto il Comune</option>
-                    ${Data.state.settings.locations.map(l => `<option value="${l}">${l}</option>`).join('')}
-                </select>`;
-                df.innerHTML = html;
-
-                let catHtml = `<button onclick="UI.setCategory('all', this)" class="filter-cat-btn active px-3 py-1 rounded-full bg-brand-dark text-white text-[10px] md:text-xs font-bold tracking-wide transition-all shadow-sm">TUTTO</button>`;
-                Data.state.settings.categories.forEach(c => {
-                    catHtml += `<button onclick="UI.setCategory('${c.id}', this)" class="filter-cat-btn px-3 py-1 rounded-full bg-white border border-gray-200 text-gray-600 text-[10px] md:text-xs font-bold tracking-wide hover:bg-gray-50 transition-all shadow-sm" data-color="${c.color}">${c.label.toUpperCase()}</button>`;
-                });
-                cf.innerHTML = catHtml;
-            },
-
-            setFilter(key, val) {
-                this.filters[key] = val;
-                this.renderProjects();
-            },
-            
-            setCategory(cat, btn) {
-                this.filters.category = cat;
-                document.querySelectorAll('.filter-cat-btn').forEach(b => {
-                    b.className = "filter-cat-btn px-3 py-1 rounded-full bg-white border border-gray-200 text-gray-600 text-[10px] md:text-xs font-bold tracking-wide hover:bg-gray-50 transition-all shadow-sm";
-                });
-                btn.className = "filter-cat-btn active px-3 py-1 rounded-full bg-brand-dark text-white text-[10px] md:text-xs font-bold tracking-wide transition-all shadow-sm";
-                this.renderProjects();
-            },
-
-            setView(v) {
-                this.filters.view = v;
-                document.getElementById('btn-view-cards').className = v === 'cards' ? "px-3 py-1.5 rounded-md text-xs font-bold transition-all flex items-center gap-1 shadow-sm bg-brand-dark text-white" : "px-3 py-1.5 rounded-md text-xs font-bold text-gray-500 hover:text-gray-800 transition-all flex items-center gap-1";
-                document.getElementById('btn-view-list').className = v === 'list' ? "px-3 py-1.5 rounded-md text-xs font-bold transition-all flex items-center gap-1 shadow-sm bg-brand-dark text-white" : "px-3 py-1.5 rounded-md text-xs font-bold text-gray-500 hover:text-gray-800 transition-all flex items-center gap-1";
-                this.renderProjects();
-            },
-
-            renderProjects() {
-                const loader = document.getElementById('search-loader');
-                loader.style.opacity = '1';
-                setTimeout(() => {
-                    const container = document.getElementById('view-container');
-                    container.innerHTML = '';
-                    
-                    const filtered = Data.state.projects.filter(p => {
-                        const s = this.filters;
-                        const matchSearch = !s.search || p.title.toLowerCase().includes(s.search.toLowerCase()) || (p.localita||'').toLowerCase().includes(s.search.toLowerCase());
-                        const matchYear = s.year === 'all' || p.year === s.year;
-                        const matchStatus = s.status === 'all' || p.stato === s.status;
-                        const matchLoc = s.location === 'all' || (p.localita || '').includes(s.location);
-                        const matchCat = s.category === 'all' || p.category === s.category;
-                        return matchSearch && matchYear && matchStatus && matchLoc && matchCat;
-                    });
-
-                    document.getElementById('results-count').innerText = `${filtered.length} Risultati`;
-                    container.className = this.filters.view === 'cards' ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 perspective-1000" : "flex flex-col gap-3";
-
-                    if(filtered.length === 0) {
-                        container.innerHTML = `<div class="col-span-3 text-center py-12 bg-white rounded-xl border border-dashed border-gray-300"><p class="text-gray-400 font-bold">Nessun progetto trovato.</p></div>`;
-                    } else {
-                        filtered.forEach(p => {
-                            container.appendChild(this.filters.view === 'cards' ? this.createCard(p) : this.createRow(p));
-                        });
-                        if(this.filters.view === 'cards') gsap.fromTo(".glass-card", { y: 20, opacity: 0 }, { y: 0, opacity: 1, stagger: 0.05, duration: 0.4, clearProps: "all" });
-                    }
-                    this.renderMapMarkers(filtered);
-                    loader.style.opacity = '0';
-                }, 200);
-            },
-
-            createCard(p) {
-                const statusColor = p.stato === 'concluso' ? 'bg-green-100 text-green-700' : (p.stato === 'in_corso' ? 'bg-yellow-100 text-yellow-700' : 'bg-gray-100 text-gray-600');
-                const catColor = Data.state.settings.categories.find(c => c.id === p.category)?.color || 'gray';
-                
-                const div = document.createElement('div');
-                div.className = "glass-card rounded-xl overflow-hidden flex flex-col h-full group relative";
-                div.id = `proj-card-${p.id}`;
-                
-                let imgHTML = `<div class="h-56 bg-gray-200 flex items-center justify-center text-gray-400">No Img</div>`;
-                if(p.imgAfter) {
-                    if(p.imgBefore) {
-                        // Slider Logic
-                        imgHTML = `
-                        <div class="h-56 relative comparison-wrapper" onmousemove="UI.handleSlider(event, this)" ontouchmove="UI.handleSlider(event, this)">
-                            <div class="comparison-after" style="background-image: url('${p.imgAfter}')"></div>
-                            <div class="comparison-before" style="background-image: url('${p.imgBefore}')"></div>
-                            <div class="comparison-handle text-gray-500"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l4-4 4 4m0 6l-4 4-4-4"></path></svg></div>
-                            <div class="absolute top-3 right-3 bg-white/90 backdrop-blur text-gray-800 text-xs font-bold px-2 py-1 rounded shadow-sm z-30">Prima/Dopo</div>
-                        </div>`;
-                    } else {
-                        // Simple Image
-                        imgHTML = `<div class="h-56 overflow-hidden relative">
-                            <img src="${p.imgAfter}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" loading="lazy">
-                            <div class="absolute top-3 right-3 bg-white/90 backdrop-blur text-gray-800 text-xs font-bold px-2 py-1 rounded shadow-sm">${p.year}</div>
-                        </div>`;
-                    }
-                }
-
-                div.innerHTML = `
-                    ${imgHTML}
-                    <div class="p-6 flex-1 flex flex-col">
-                        <div class="flex justify-between items-start mb-2">
-                             <span class="text-[10px] font-bold uppercase tracking-wider text-${catColor}-600 bg-${catColor}-50 px-2 py-0.5 rounded">${p.category}</span>
-                             <span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase ${statusColor}">${p.stato.replace('_', ' ')}</span>
-                        </div>
-                        <h3 class="font-bold text-lg mb-1 text-brand-dark leading-tight group-hover:text-brand-blue transition-colors">${p.title}</h3>
-                        <div class="text-xs text-gray-500 mb-3">📍 ${p.localita || 'Comune'}</div>
-                        <p class="text-sm text-gray-600 line-clamp-3 mb-4">${p.desc}</p>
-                        ${p.promise ? `<div class="promise-quote mt-auto">${p.promise}</div>` : ''}
-                        <div class="pt-4 border-t border-gray-100 text-xs text-gray-400 font-medium mt-2">
-                            ${p.importo ? `Investimento: <span class="text-gray-600 font-bold">€${Number(p.importo).toLocaleString()}</span>` : ''}
-                        </div>
-                    </div>
-                `;
-                return div;
-            },
-
-            createRow(p) {
-                const div = document.createElement('div');
-                div.className = "bg-white border border-gray-200 rounded-lg p-4 cursor-pointer hover:bg-blue-50 transition-colors";
-                div.innerHTML = `
-                    <div class="flex items-center justify-between" onclick="this.parentElement.querySelector('.list-details').classList.toggle('open')">
-                        <div class="flex items-center gap-4">
-                            <span class="font-bold text-xs text-gray-400 w-10">${p.year}</span>
-                            <div>
-                                <h4 class="font-bold text-brand-dark text-sm">${p.title}</h4>
-                                <span class="text-xs text-gray-500">${p.localita} • ${p.category}</span>
-                            </div>
-                        </div>
-                        <div class="text-xs font-bold bg-gray-100 px-2 py-1 rounded">${p.stato}</div>
-                    </div>
-                    <div class="list-details mt-0 text-xs text-gray-600 pt-0 border-t-0 border-gray-100">
-                        <div class="p-4 bg-gray-50 rounded mt-2 flex gap-4 flex-col md:flex-row">
-                            <img src="${p.imgAfter}" class="w-full md:w-32 h-32 object-cover rounded bg-gray-200">
-                            <div class="flex-1">
-                                ${p.promise ? `<p class="mb-2 text-brand-blue bg-blue-50 p-2 rounded border-l-2 border-brand-blue italic">"Obiettivo: ${p.promise}"</p>` : ''}
-                                <p class="font-bold mb-1">Risultato:</p>
-                                <p>${p.desc}</p>
-                                ${p.importo ? `<p class="mt-2 font-bold text-gray-800">Investimento: €${Number(p.importo).toLocaleString()}</p>` : ''}
-                            </div>
-                        </div>
-                    </div>
-                `;
-                return div;
-            },
-
-            renderMapMarkers(list) {
-                const c = document.getElementById('map-markers-container');
+            renderComparison() {
+                const c = document.getElementById('areas-container');
                 c.innerHTML = '';
-                const pos = { 'Avigliano': [50, 45], 'Sismano': [30, 70], 'Dunarobba': [60, 30], 'Toscolano': [25, 40], 'Santa Restituta': [70, 60], 'Comune': [50, 50], 'Tutto': [40,60] };
+                Data.state.areas.forEach(area => {
+                    const promisesList = area.promises.split('\n').map(l => `<li>${l}</li>`).join('');
+                    const resultsList = area.results.split('\n').map(l => `<li>${l}</li>`).join('');
+                    
+                    c.innerHTML += `
+                    <div class="area-card glass-card p-0 overflow-hidden border-l-4 ${area.color.replace('bg-', 'border-l-')}">
+                        <div class="p-6 md:p-8 flex flex-col md:flex-row gap-8">
+                            <div class="md:w-1/3 border-b md:border-b-0 md:border-r border-gray-100 pb-6 md:pb-0 md:pr-6">
+                                <div class="flex items-center gap-3 mb-4">
+                                    <span class="text-2xl">${area.icon}</span>
+                                    <h3 class="font-serif font-bold text-2xl ${area.titleColor}">${area.name}</h3>
+                                </div>
+                                <h4 class="font-bold text-sm uppercase text-gray-400 mb-4 tracking-widest">Cosa avevamo promesso</h4>
+                                <ul class="promise-list space-y-3">
+                                    ${promisesList}
+                                </ul>
+                            </div>
+                            <div class="md:w-2/3 pt-2 md:pt-0">
+                                <h4 class="font-bold text-sm uppercase text-brand-blue mb-4 tracking-widest">Cosa abbiamo fatto</h4>
+                                <ul class="check-list space-y-3 text-brand-dark font-medium">
+                                    ${resultsList}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>`;
+                });
+            },
+            renderOngoing() {
+                const c = document.getElementById('ongoing-container');
+                c.innerHTML = '';
+                Data.state.ongoingProjects.forEach(p => {
+                    c.innerHTML += `
+                    <div>
+                        <p class="text-gray-300 font-sans mb-6 text-lg leading-relaxed">${p.desc}</p>
+                        <div class="w-full bg-gray-700 rounded-full h-4 mb-2">
+                            <div class="bg-brand-accent h-4 rounded-full transition-all duration-1000" style="width: ${p.progress}%"></div>
+                        </div>
+                        <div class="flex justify-between text-xs font-bold uppercase tracking-wider text-gray-400">
+                            <span>Avvio Lavori</span>
+                            <span>Completamento</span>
+                        </div>
+                    </div>`;
+                });
+            },
+            renderFuture() {
+                const c = document.getElementById('future-container');
+                c.innerHTML = '';
+                Data.state.futureGoals.forEach(g => {
+                    c.innerHTML += `
+                    <div class="bg-white p-6 rounded-theme shadow-sm border border-gray-100 flex items-start gap-4">
+                        <div class="mt-1 text-brand-blue">➔</div>
+                        <p class="font-medium text-gray-700">${g}</p>
+                    </div>`;
+                });
+            },
+            renderProjects() {
+                const c = document.getElementById('view-container'); c.innerHTML = '';
+                const cats = { 'sociale': 'Sociale', 'cultura': 'Cultura', 'opere': 'Opere', 'ambiente': 'Ambiente', 'amministrazione': 'Amm.ne' };
                 
+                const cf = document.getElementById('category-filters');
+                cf.innerHTML = `<button onclick="UI.filter='all'; UI.renderProjects()" class="px-4 py-1.5 text-xs font-bold rounded-full transition-colors ${this.filter==='all'?'bg-brand-dark text-white':'bg-gray-100 hover:bg-gray-200 text-gray-600'}">TUTTI</button>` + 
+                Object.keys(cats).map(k => `<button onclick="UI.filter='${k}'; UI.renderProjects()" class="px-4 py-1.5 text-xs font-bold rounded-full transition-colors ${this.filter===k?'bg-brand-blue text-white':'bg-gray-100 hover:bg-gray-200 text-gray-600'}">${cats[k].toUpperCase()}</button>`).join('');
+
+                const q = document.getElementById('search-input').value.toLowerCase();
+                const list = Data.state.projects.filter(p => (this.filter==='all' || p.category === this.filter) && p.title.toLowerCase().includes(q));
+                
+                c.className = "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8";
+
                 list.forEach(p => {
-                    const locKey = Object.keys(pos).find(k => (p.localita || '').includes(k)) || 'Avigliano';
-                    const [top, left] = pos[locKey];
-                    const ft = top + (Math.random()*10 - 5);
-                    const fl = left + (Math.random()*10 - 5);
-                    let bg = '#fbbf24'; 
-                    if(p.category.includes('social')) bg = '#3b82f6';
-                    if(p.category.includes('cultur')) bg = '#10b981';
-                    if(p.category.includes('oper')) bg = '#854d0e';
-                    if(p.category.includes('ambien')) bg = '#f97316';
-                    
-                    const m = document.createElement('div');
-                    m.className = "map-marker";
-                    m.style.top = `${ft}%`;
-                    m.style.left = `${fl}%`;
-                    m.style.backgroundColor = bg;
-                    
-                    m.innerHTML = `<div class="map-popup shadow-lg"><strong class="text-brand-blue block mb-1">${p.title}</strong><span class="text-xs text-gray-500">${p.year}</span></div>`;
-                    m.onmouseenter = () => {
-                         const card = document.getElementById(`proj-card-${p.id}`);
-                         if(card) {
-                             card.classList.add('ring-4', 'ring-brand-accent');
-                             card.scrollIntoView({behavior: 'smooth', block: 'center'});
-                         }
+                    const el = document.createElement('div');
+                    el.className = "glass-card overflow-hidden flex flex-col h-full bg-white group";
+                    el.innerHTML = `
+                        <div class="h-56 bg-gray-200 relative overflow-hidden">
+                            ${p.imgBefore ? `
+                            <div class="comparison-wrapper" onmousemove="UI.slider(event, this)" ontouchmove="UI.slider(event, this)">
+                                <div class="comparison-after" style="background-image: url('${p.imgAfter}')"></div>
+                                <div class="comparison-before" style="background-image: url('${p.imgBefore}')"></div>
+                                <div class="comparison-handle text-gray-500 text-xs font-bold">↔</div>
+                                <span class="absolute bottom-2 left-2 text-[10px] bg-black/50 text-white px-1 rounded z-20">PRIMA</span>
+                                <span class="absolute bottom-2 right-2 text-[10px] bg-brand-blue/80 text-white px-1 rounded z-0">DOPO</span>
+                            </div>` : `<img src="${p.imgAfter}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">`}
+                        </div>
+                        <div class="p-6 flex-1 flex flex-col">
+                            <div class="flex justify-between mb-3 items-center">
+                                <span class="text-[10px] font-bold uppercase px-2 py-1 rounded bg-slate-100 text-slate-600">${cats[p.category]}</span>
+                                <span class="text-xs font-bold ${p.stato==='concluso'?'text-green-600':'text-amber-600'}">${p.stato === 'concluso' ? '✓ Concluso' : '🚧 In Corso'}</span>
+                            </div>
+                            <h3 class="font-bold text-xl text-brand-dark mb-2 font-serif">${p.title}</h3>
+                            <p class="text-sm text-gray-600 line-clamp-3 mb-4 font-sans leading-relaxed">${p.desc}</p>
+                        </div>
+                    `;
+                    c.appendChild(el);
+                });
+            },
+            slider(e, el) {
+                const rect = el.getBoundingClientRect();
+                const x = (e.touches?e.touches[0].clientX:e.clientX) - rect.left;
+                const p = Math.max(0,Math.min(100, (x/rect.width)*100));
+                el.querySelector('.comparison-before').style.width = p + '%';
+                el.querySelector('.comparison-handle').style.left = p + '%';
+            },
+            renderTimeline() {
+                const c = document.getElementById('timeline-container'); c.innerHTML = '';
+                Data.state.timeline.forEach((step, idx) => {
+                    c.innerHTML += `
+                    <div class="bg-white p-6 rounded-theme shadow-sm border border-gray-100 relative ${idx===1?'ring-2 ring-brand-blue':''}">
+                        <div class="w-12 h-12 ${idx===1?'bg-brand-blue text-white':'bg-white text-brand-dark border-2 border-gray-200'} rounded-full flex items-center justify-center font-bold mx-auto mb-4 text-xl shadow relative md:-top-12 z-20">${step.step}</div>
+                        <h4 class="font-bold text-xl font-serif text-brand-dark">${step.title}</h4>
+                        <p class="text-sm text-brand-blue font-bold mb-3">${step.year}</p>
+                        <p class="text-sm text-gray-500 leading-relaxed">${step.desc}</p>
+                    </div>`;
+                });
+            },
+            renderPriorities() {
+                const c = document.getElementById('priority-grid'); c.innerHTML = '';
+                Data.state.priorities.forEach(p => {
+                    const voted = localStorage.getItem(`vote_${p.id}`);
+                    const div = document.createElement('div');
+                    div.className = `bg-white/10 border border-white/20 p-4 rounded-theme hover:bg-white/20 transition cursor-pointer flex items-center gap-4 text-left ${voted ? 'ring-2 ring-brand-accent bg-white/20' : ''}`;
+                    div.onclick = (e) => { 
+                        if(document.body.classList.contains('admin-mode')) { e.stopPropagation(); Admin.handleClick('priorities'); return; }
+                        localStorage.setItem(`vote_${p.id}`, voted ? '' : 'true'); 
+                        this.renderPriorities(); 
+                        this.toast(voted ? 'Preferenza rimossa' : 'Preferenza registrata');
                     };
-                    m.onmouseleave = () => {
-                         const card = document.getElementById(`proj-card-${p.id}`);
-                         if(card) card.classList.remove('ring-4', 'ring-brand-accent');
-                    };
+                    div.innerHTML = `<div class="text-2xl">${p.icon}</div><div><h3 class="font-bold text-white font-serif">${p.title}</h3>${voted ? '<span class="text-brand-accent text-[10px] font-bold uppercase">✅ Votato</span>' : ''}</div>`;
+                    c.appendChild(div);
+                });
+            },
+            renderMap() {
+                const c = document.getElementById('map-markers-container'); c.innerHTML = '';
+                const coords = [{t:30,l:40},{t:50,l:50},{t:40,l:60},{t:60,l:30},{t:25,l:55},{t:45,l:45}]; // Simulated positions
+                Data.state.projects.forEach((p, i) => {
+                    const pos = coords[i % coords.length];
+                    const m = document.createElement('div'); m.className = 'map-marker';
+                    m.style.top = (pos.t + (Math.random()*10-5))+'%'; 
+                    m.style.left = (pos.l + (Math.random()*10-5))+'%';
+                    m.style.borderColor = p.category === 'opere' ? '#fbbf24' : (p.category === 'sociale' ? '#3b82f6' : '#10b981');
+                    m.innerHTML = `<div class="map-popup">${p.title}</div>`;
                     c.appendChild(m);
                 });
             },
-
-            filterCantieri(type) {
-                this.cantiereFilter = type;
-                document.querySelectorAll('.cantiere-filter').forEach(b => b.classList.remove('active', 'bg-white/20'));
-                event.target.classList.add('active', 'bg-white/20');
-                this.renderCantieri();
-            },
-
-            renderCantieri() {
-                const container = document.getElementById('wip-container');
-                container.innerHTML = '';
-                const filtered = Data.state.projects.filter(p => {
-                    const isWip = p.stato === 'in_corso' || p.stato === 'programmato';
-                    const matchType = this.cantiereFilter === 'all' || p.stato === this.cantiereFilter;
-                    return isWip && matchType;
-                });
-
-                if(filtered.length === 0) {
-                    container.innerHTML = '<p class="col-span-3 text-center text-white/50 italic">Nessun cantiere in questa categoria.</p>';
-                    return;
-                }
-
-                filtered.forEach(p => {
-                    const progress = p.progress || (p.stato === 'in_corso' ? 50 : 10);
-                    const div = document.createElement('div');
-                    div.className = "bg-white/10 backdrop-blur-md border border-white/20 p-6 rounded-2xl flex flex-col hover:bg-white/15 transition-colors";
-                    div.innerHTML = `
-                        <div class="flex justify-between items-start mb-4">
-                            <h3 class="text-lg font-bold text-yellow-400">${p.title}</h3>
-                            <span class="text-[10px] uppercase border border-white/30 px-2 py-0.5 rounded text-white">${p.stato.replace('_', ' ')}</span>
-                        </div>
-                        <div class="mb-4 flex-1">
-                            <p class="text-gray-200 text-sm mb-2">${p.desc}</p>
-                            ${p.noteCantiere ? `<p class="text-xs text-yellow-200 bg-yellow-400/10 p-2 rounded">ℹ️ ${p.noteCantiere}</p>` : ''}
-                        </div>
-                        <div class="mt-auto">
-                            <div class="flex justify-between text-xs text-blue-200 mb-1"><span>${p.faseCantiere || 'Fase operativa'}</span><span>${progress}%</span></div>
-                            <div class="w-full bg-blue-900/50 rounded-full h-2"><div class="bg-yellow-400 h-full rounded-full transition-all duration-1000 relative" style="width: ${progress}%"></div></div>
-                        </div>
-                    `;
-                    container.appendChild(div);
-                });
-            },
-
-            renderPriorities() {
-                const grid = document.getElementById('priority-grid');
-                const chart = document.getElementById('priority-chart');
-                grid.innerHTML = '';
-                chart.innerHTML = '';
-                Data.state.priorities.forEach(p => {
-                    const votes = Data.state.votes[p.id] || 0;
-                    const isVoted = Data.isVoted(p.id);
-                    const card = document.createElement('div');
-                    card.className = `priority-card bg-white p-6 rounded-xl border border-gray-200 relative group ${isVoted ? 'selected' : ''}`;
-                    card.onclick = () => {
-                        const newState = Data.vote(p.id);
-                        UI.toast(newState ? 'Preferenza salvata!' : 'Preferenza rimossa', newState ? 'success' : 'info');
-                        UI.renderPriorities();
-                    };
-                    card.innerHTML = `
-                        <div class="flex justify-between items-start mb-4">
-                            <div class="w-12 h-12 rounded-full bg-brand-dark/5 flex items-center justify-center text-2xl group-hover:scale-110 transition-transform">${p.icon}</div>
-                            ${isVoted ? '<span class="bg-brand-blue text-white text-[10px] font-bold px-2 py-1 rounded-full animate-pulse">SCELTA</span>' : ''}
-                        </div>
-                        <h3 class="font-bold text-lg text-brand-dark mb-2">${p.title}</h3>
-                        <p class="text-sm text-gray-500">${p.desc}</p>
-                    `;
-                    grid.appendChild(card);
-                    const max = Math.max(...Object.values(Data.state.votes), 10);
-                    const width = (votes / max) * 100;
-                    const bar = document.createElement('div');
-                    bar.className = "flex items-center gap-4 text-xs";
-                    bar.innerHTML = `
-                        <span class="w-32 font-bold text-gray-600 truncate text-right">${p.title}</span>
-                        <div class="flex-1 bg-gray-100 rounded-full h-3 overflow-hidden"><div class="bg-brand-blue h-full rounded-full transition-all duration-1000" style="width: ${Math.max(width, 2)}%"></div></div>
-                        <span class="w-8 font-mono text-gray-400">${votes}</span>
-                    `;
-                    chart.appendChild(bar);
-                });
-            },
-
-            renderStats() {
-                const p = Data.state.projects;
-                this.animateValue("stat-total", 0, p.length, 1000);
-                this.animateValue("stat-completed", 0, p.filter(x => x.stato === 'concluso').length, 1000);
-                this.animateValue("stat-wip", 0, p.filter(x => x.stato === 'in_corso').length, 1000);
-                const money = p.reduce((acc, c) => acc + (Number(c.importo)||0), 0);
-                document.getElementById('stat-money').innerText = money > 1000000 ? `€${(money/1000000).toFixed(1)}M` : `€${(money/1000).toFixed(0)}k`;
-            },
-            
-            animateValue(id, start, end, duration) {
-                const obj = document.getElementById(id);
-                let startTimestamp = null;
-                const step = (timestamp) => {
-                    if (!startTimestamp) startTimestamp = timestamp;
-                    const progress = Math.min((timestamp - startTimestamp) / duration, 1);
-                    obj.innerHTML = Math.floor(progress * (end - start) + start);
-                    if (progress < 1) window.requestAnimationFrame(step);
-                };
-                window.requestAnimationFrame(step);
+            toast(m) {
+                const t = document.createElement('div'); t.className = 'toast'; t.innerText = m;
+                document.getElementById('toast-container').appendChild(t); setTimeout(()=>t.remove(), 3000);
             }
         };
 
-        // --- ADMIN MODULE ---
         const Admin = {
-            login() {
-                const pass = document.getElementById('admin-password').value;
-                if(pass === 'admin') {
+            toggle() { document.getElementById('admin-dashboard').classList.toggle('translate-x-full'); },
+            login() { 
+                if(document.getElementById('admin-password').value === 'admin') {
                     document.getElementById('login-modal').classList.add('hidden');
                     document.body.classList.add('admin-mode');
                     this.toggle();
-                    this.renderProjectsList();
-                    this.renderPrioritiesList();
-                    this.renderSettingsForm();
-                    this.renderTextsForm();
-                    UI.toast('Benvenuto Amministratore', 'success');
+                } else { alert('Password errata'); }
+            },
+            handleClick(sectionId) {
+                if(!document.body.classList.contains('admin-mode')) return;
+                this.loadSectionEditor(sectionId);
+                const sb = document.getElementById('admin-dashboard');
+                if(sb.classList.contains('translate-x-full')) sb.classList.remove('translate-x-full');
+            },
+            loadSectionEditor(type) {
+                document.getElementById('admin-default-view').classList.add('hidden');
+                const f = document.getElementById('admin-dynamic-form');
+                f.classList.remove('hidden');
+                
+                let html = `<div class="mb-4 pb-2 border-b flex justify-between items-center"><h3 class="font-bold text-sm uppercase text-brand-blue">Modifica ${type}</h3> <button onclick="Admin.closeEditor()" class="text-xs text-red-500 font-bold hover:underline">CHIUDI</button></div>`;
+
+                if(type === 'hero') {
+                    html += `
+                    <label class="text-xs font-bold text-gray-500">Titolo Hero</label><textarea id="ed-hero-title" class="w-full border p-2 mb-2 rounded font-serif text-sm">${Data.state.texts.heroTitle}</textarea>
+                    <label class="text-xs font-bold text-gray-500">Sottotitolo</label><textarea id="ed-hero-desc" class="w-full border p-2 mb-2 rounded text-sm">${Data.state.texts.heroDesc}</textarea>
+                    <button onclick="Admin.saveHero()" class="w-full bg-brand-blue text-white py-2 rounded font-bold text-sm shadow mt-2">Salva Modifiche</button>`;
+                } else if(type === 'design') {
+                    html += `
+                    <p class="text-xs mb-3 text-gray-500">Seleziona lo stile grafico globale:</p>
+                    <button onclick="Admin.setTheme('classic')" class="w-full p-3 border rounded mb-2 text-left hover:bg-blue-50 transition-colors ${Data.state.theme==='classic'?'border-brand-blue bg-blue-50 ring-1 ring-brand-blue':''}">🏛️ <b>Classico</b><br><span class="text-xs text-gray-500">Serif, Blu/Oro, Istituzionale</span></button>
+                    <button onclick="Admin.setTheme('modern')" class="w-full p-3 border rounded mb-2 text-left hover:bg-blue-50 transition-colors ${Data.state.theme==='modern'?'border-brand-blue bg-blue-50 ring-1 ring-brand-blue':''}">🔷 <b>Moderno</b><br><span class="text-xs text-gray-500">Inter, Minimal, Pulito</span></button>
+                    <button onclick="Admin.setTheme('energetic')" class="w-full p-3 border rounded mb-2 text-left hover:bg-blue-50 transition-colors ${Data.state.theme==='energetic'?'border-brand-blue bg-blue-50 ring-1 ring-brand-blue':''}">⚡ <b>Energetico</b><br><span class="text-xs text-gray-500">Bold, Contrasto alto</span></button>`;
+                } else if(type === 'areas') {
+                    html += `<p class="text-xs mb-2 text-gray-500">Modifica testi confronto (Promesso vs Fatto):</p>
+                    <select id="ed-area-select" class="w-full border p-2 mb-4 rounded text-sm font-bold" onchange="Admin.loadAreaFields(this.value)">
+                        ${Data.state.areas.map((a,i) => `<option value="${i}">${a.name}</option>`).join('')}
+                    </select>
+                    <div id="ed-area-fields"></div>
+                    <button onclick="Admin.saveArea()" class="w-full bg-brand-blue text-white py-2 rounded font-bold text-sm shadow mt-4">Salva Area</button>`;
+                    setTimeout(() => Admin.loadAreaFields(0), 10);
                 } else {
-                    UI.toast('Password Errata', 'error');
+                    html += `<p class="text-sm text-gray-500 italic">Editor specifico non disponibile. Usa il backup JSON per modifiche avanzate.</p>`;
                 }
+                f.innerHTML = html;
             },
-            toggle() { document.getElementById('admin-dashboard').classList.toggle('translate-x-full'); },
-            logout() { location.reload(); },
-            switchTab(tab) {
-                document.querySelectorAll('[id^="admin-tab-"]').forEach(el => el.classList.add('hidden'));
-                document.getElementById(`admin-tab-${tab}`).classList.remove('hidden');
-                document.querySelectorAll('[id^="tab-"]').forEach(el => el.className = "px-5 py-3 text-sm font-bold text-gray-500 hover:text-brand-blue transition-colors whitespace-nowrap");
-                document.getElementById(`tab-${tab}`).className = "px-5 py-3 text-sm font-bold text-brand-blue border-b-2 border-brand-blue transition-colors whitespace-nowrap";
+            loadAreaFields(idx) {
+                const area = Data.state.areas[idx];
+                const div = document.getElementById('ed-area-fields');
+                div.innerHTML = `
+                    <input type="hidden" id="ed-area-idx" value="${idx}">
+                    <label class="text-xs font-bold text-gray-500">Titolo Area</label>
+                    <input type="text" id="ed-area-name" class="w-full border p-2 mb-2 rounded text-sm" value="${area.name}">
+                    <label class="text-xs font-bold text-gray-500">Promesse (una per riga)</label>
+                    <textarea id="ed-area-prom" class="w-full border p-2 mb-2 rounded text-sm h-32">${area.promises}</textarea>
+                    <label class="text-xs font-bold text-gray-500">Risultati (uno per riga)</label>
+                    <textarea id="ed-area-res" class="w-full border p-2 mb-2 rounded text-sm h-32">${area.results}</textarea>
+                `;
             },
-            editingId: null,
-            resetForm() {
-                this.editingId = null;
-                document.getElementById('form-title').innerText = "Aggiungi Nuovo Progetto";
-                document.querySelectorAll('#admin-tab-projects input, #admin-tab-projects textarea').forEach(i => { if(i.id !== 'admin-search') i.value = ''; });
-                document.getElementById('edit-stato').value = 'concluso';
-                this.toggleCantiereFields();
+            saveArea() {
+                const idx = document.getElementById('ed-area-idx').value;
+                Data.state.areas[idx].name = document.getElementById('ed-area-name').value;
+                Data.state.areas[idx].promises = document.getElementById('ed-area-prom').value;
+                Data.state.areas[idx].results = document.getElementById('ed-area-res').value;
+                Data.save(); UI.renderComparison(); UI.toast('Area aggiornata');
             },
-            renderProjectsList() {
-                const list = document.getElementById('admin-project-list');
-                const search = document.getElementById('admin-search').value.toLowerCase();
-                list.innerHTML = '';
-                document.getElementById('admin-count').innerText = Data.state.projects.length;
-                Data.state.projects.filter(p => p.title.toLowerCase().includes(search)).forEach((p, idx) => {
-                    const div = document.createElement('div');
-                    div.className = "flex items-center justify-between p-3 hover:bg-blue-50 transition-colors";
-                    div.innerHTML = `
-                        <span class="font-bold text-xs w-8 text-gray-300">#${idx+1}</span>
-                        <div class="flex-1 font-bold text-sm text-gray-700 cursor-pointer" onclick="Admin.editProject(${p.id})">${p.title}</div>
-                        <div class="flex items-center gap-2">
-                             <button onclick="Admin.moveProject(${idx}, -1)" class="text-gray-400 hover:text-brand-blue px-1">↑</button>
-                             <button onclick="Admin.moveProject(${idx}, 1)" class="text-gray-400 hover:text-brand-blue px-1">↓</button>
-                             <button onclick="Admin.deleteProject(${p.id})" class="text-red-400 hover:text-red-600 px-2 font-bold">✕</button>
-                        </div>
-                    `;
-                    list.appendChild(div);
-                });
+            closeEditor() {
+                document.getElementById('admin-dynamic-form').classList.add('hidden');
+                document.getElementById('admin-default-view').classList.remove('hidden');
             },
-            toggleCantiereFields() {
-                const val = document.getElementById('edit-stato').value;
-                document.getElementById('cantiere-fields').classList.toggle('hidden', val === 'concluso');
+            saveHero() {
+                Data.state.texts.heroTitle = document.getElementById('ed-hero-title').value;
+                Data.state.texts.heroDesc = document.getElementById('ed-hero-desc').value;
+                Data.save(); UI.renderHero(); UI.toast('Hero aggiornata!');
             },
-            editProject(id) {
-                const p = Data.state.projects.find(x => x.id === id);
-                if(!p) return;
-                this.editingId = id;
-                document.getElementById('form-title').innerText = "Modifica: " + p.title;
-                document.getElementById('edit-title').value = p.title;
-                document.getElementById('edit-year').value = p.year;
-                document.getElementById('edit-category').value = p.category;
-                document.getElementById('edit-stato').value = p.stato;
-                document.getElementById('edit-localita').value = p.localita;
-                document.getElementById('edit-importo').value = p.importo || '';
-                document.getElementById('edit-fonte').value = p.fonte || '';
-                document.getElementById('edit-link').value = p.linkDelibera || '';
-                document.getElementById('edit-promise').value = p.promise || '';
-                document.getElementById('edit-desc').value = p.desc || '';
-                document.getElementById('edit-progress').value = p.progress || '';
-                document.getElementById('edit-fase').value = p.faseCantiere || '';
-                document.getElementById('edit-note-cantiere').value = p.noteCantiere || '';
-                this.toggleCantiereFields();
-                document.getElementById('admin-tab-projects').scrollIntoView();
-            },
-            async saveProject() {
-                const title = document.getElementById('edit-title').value;
-                if(!title) return UI.toast('Titolo obbligatorio', 'error');
-                const newProj = {
-                    id: this.editingId || Date.now(),
-                    title: title,
-                    year: document.getElementById('edit-year').value,
-                    category: document.getElementById('edit-category').value,
-                    stato: document.getElementById('edit-stato').value,
-                    localita: document.getElementById('edit-localita').value,
-                    importo: document.getElementById('edit-importo').value,
-                    fonte: document.getElementById('edit-fonte').value,
-                    linkDelibera: document.getElementById('edit-link').value,
-                    promise: document.getElementById('edit-promise').value,
-                    desc: document.getElementById('edit-desc').value,
-                    progress: document.getElementById('edit-progress').value,
-                    faseCantiere: document.getElementById('edit-fase').value,
-                    noteCantiere: document.getElementById('edit-note-cantiere').value,
-                    imgAfter: "", imgBefore: ""
-                };
-                if(this.editingId) {
-                    const old = Data.state.projects.find(p => p.id === this.editingId);
-                    newProj.imgAfter = old.imgAfter;
-                    newProj.imgBefore = old.imgBefore;
-                }
-                const fAfter = document.getElementById('file-after').files[0];
-                const fBefore = document.getElementById('file-before').files[0];
-                if(fAfter) newProj.imgAfter = await this.compress(fAfter);
-                if(fBefore) newProj.imgBefore = await this.compress(fBefore);
-                if(this.editingId) {
-                    const idx = Data.state.projects.findIndex(p => p.id === this.editingId);
-                    Data.state.projects[idx] = newProj;
-                } else {
-                    Data.state.projects.unshift(newProj);
-                }
-                Data.save();
-                this.resetForm();
-                this.renderProjectsList();
-                UI.renderProjects();
-                UI.renderStats();
-                UI.renderMap();
-                UI.toast('Progetto Salvato', 'success');
-            },
-            deleteProject(id) {
-                if(confirm('Eliminare?')) {
-                    Data.state.projects = Data.state.projects.filter(p => p.id !== id);
-                    Data.save();
-                    this.renderProjectsList();
-                    UI.renderProjects();
-                    UI.toast('Progetto eliminato', 'success');
-                }
-            },
-            moveProject(idx, dir) {
-                const arr = Data.state.projects;
-                if(idx + dir < 0 || idx + dir >= arr.length) return;
-                [arr[idx], arr[idx+dir]] = [arr[idx+dir], arr[idx]];
-                Data.save();
-                this.renderProjectsList();
-                UI.renderProjects();
-            },
-            renderPrioritiesList() {
-                const c = document.getElementById('admin-priorities-list');
-                c.innerHTML = '';
-                Data.state.priorities.forEach((p, idx) => {
-                     const div = document.createElement('div');
-                     div.className = "flex justify-between items-center bg-gray-50 p-3 rounded";
-                     div.innerHTML = `<span>${p.icon} <b>${p.title}</b></span> <button onclick="Admin.delPriority(${idx})" class="text-red-500 font-bold">✕</button>`;
-                     c.appendChild(div);
-                });
-            },
-            addPriority() {
-                const id = document.getElementById('prio-id').value;
-                const title = document.getElementById('prio-title').value;
-                if(!id || !title) return UI.toast('Dati mancanti', 'error');
-                Data.state.priorities.push({
-                    id, title,
-                    icon: document.getElementById('prio-icon').value || '🔹',
-                    desc: document.getElementById('prio-desc').value
-                });
-                Data.save();
-                this.renderPrioritiesList();
-                UI.renderPriorities();
-                UI.toast('Priorità aggiunta', 'success');
-            },
-            delPriority(idx) {
-                Data.state.priorities.splice(idx, 1);
-                Data.save();
-                this.renderPrioritiesList();
-                UI.renderPriorities();
-            },
-            resetVotes() {
-                if(confirm('Azzerare tutti i voti?')) {
-                    Data.state.votes = {};
-                    Data.save();
-                    UI.renderPriorities();
-                    UI.toast('Voti azzerati', 'info');
-                }
-            },
-            renderSettingsForm() {
-                document.getElementById('set-years').value = Data.state.settings.years.join(', ');
-                document.getElementById('set-locations').value = Data.state.settings.locations.join(', ');
-                this.updateSelects();
-            },
-            saveSettings() {
-                const y = document.getElementById('set-years').value.split(',').map(s=>s.trim()).filter(s=>s);
-                const l = document.getElementById('set-locations').value.split(',').map(s=>s.trim()).filter(s=>s);
-                if(y.length && l.length) {
-                    Data.state.settings.years = y;
-                    Data.state.settings.locations = l;
-                    Data.save();
-                    this.updateSelects();
-                    UI.renderFilters();
-                    UI.toast('Configurazione salvata', 'success');
-                }
-            },
-            updateSelects() {
-                const ySel = document.getElementById('edit-year');
-                const lSel = document.getElementById('edit-localita');
-                const cSel = document.getElementById('edit-category');
-                ySel.innerHTML = Data.state.settings.years.map(x => `<option value="${x}">${x}</option>`).join('');
-                lSel.innerHTML = Data.state.settings.locations.map(x => `<option value="${x}">${x}</option>`).join('');
-                cSel.innerHTML = Data.state.settings.categories.map(x => `<option value="${x.id}">${x.label}</option>`).join('');
-            },
-            renderTextsForm() {
-                document.getElementById('txt-hero-title').value = Data.state.texts.heroTitle || '';
-                document.getElementById('txt-hero-desc').value = Data.state.texts.heroDesc || '';
-                document.getElementById('txt-wip-intro').value = Data.state.texts.wipIntro || '';
-            },
-            saveGlobalTexts() {
-                Data.state.texts = {
-                    heroTitle: document.getElementById('txt-hero-title').value,
-                    heroDesc: document.getElementById('txt-hero-desc').value,
-                    wipIntro: document.getElementById('txt-wip-intro').value
-                };
-                Data.save();
-                UI.applyGlobalTexts();
-                UI.toast('Testi aggiornati', 'success');
-            },
-            compress(file) {
-                return new Promise(resolve => {
-                    const r = new FileReader();
-                    r.readAsDataURL(file);
-                    r.onload = e => {
-                        const img = new Image();
-                        img.src = e.target.result;
-                        img.onload = () => {
-                            const cvs = document.createElement('canvas');
-                            const ctx = cvs.getContext('2d');
-                            const scale = 800 / Math.max(img.width, img.height);
-                            cvs.width = img.width * scale;
-                            cvs.height = img.height * scale;
-                            ctx.drawImage(img, 0, 0, cvs.width, cvs.height);
-                            resolve(cvs.toDataURL('image/jpeg', 0.7));
-                        };
-                    };
-                });
-            },
-            previewImage(input, targetId) {
-                const file = input.files[0];
-                if(file) {
-                    const url = URL.createObjectURL(file);
-                    document.getElementById(targetId).innerHTML = `<img src="${url}" class="w-full h-full object-cover rounded-lg">`;
-                }
+            setTheme(t) {
+                Data.state.theme = t;
+                Data.save(); UI.applyTheme(t); this.loadSectionEditor('design'); UI.toast('Tema cambiato: '+t);
             },
             exportData() {
-                const str = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(Data.state));
-                const a = document.createElement('a');
-                a.href = str; a.download = `avigliano_backup_${new Date().toISOString().slice(0,10)}.json`;
-                a.click();
+                const a = document.createElement('a'); a.href = 'data:text/json;charset=utf-8,'+encodeURIComponent(JSON.stringify(Data.state)); a.download = 'avigliano_backup.json'; a.click();
             },
-            importData(input) {
-                const file = input.files[0];
-                if(!file) return;
-                const r = new FileReader();
-                r.onload = e => {
-                    try {
-                        const d = JSON.parse(e.target.result);
-                        if(d.schemaVersion === '5.1' || confirm('Versione schema differente. Importare comunque?')) {
-                            Data.state = d;
-                            Data.save();
-                            location.reload();
-                        }
-                    } catch(err) { UI.toast('File non valido', 'error'); }
-                };
-                r.readAsText(file);
-            }
+            resetData() { if(confirm('Sei sicuro? Questo cancellerà tutte le modifiche.')) { localStorage.removeItem('avigliano_v8_db'); location.reload(); } }
         };
 
-        window.addEventListener('DOMContentLoaded', () => {
-            Data.init();
-            UI.init();
-            document.getElementById('search-input').addEventListener('input', (e) => {
-                clearTimeout(window.searchTimer);
-                window.searchTimer = setTimeout(() => {
-                    UI.filters.search = e.target.value;
-                    UI.renderProjects();
-                }, 300);
-            });
-        });
+        window.addEventListener('DOMContentLoaded', () => Data.init());
     </script>
 </body>
 </html>
