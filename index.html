@@ -73,12 +73,12 @@
             background: white;
             border: 1px solid #e2e8f0;
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transition: box-shadow 0.3s ease, border-color 0.3s ease; /* Transform managed by JS Tilt */
+            transform-style: preserve-3d;
             backface-visibility: hidden;
         }
 
         .glass-card:hover {
-            transform: translateY(-5px) scale(1.01);
             box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
             border-color: #cbd5e1;
         }
@@ -109,44 +109,44 @@
         }
 
         /* Comparison Slider */
-        .comparison-slider {
+        .comparison-wrapper {
             position: relative;
             width: 100%;
             height: 100%;
             overflow: hidden;
             cursor: ew-resize;
-            touch-action: pan-y;
+            user-select: none;
         }
-        .comparison-slider img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
+        .comparison-after {
             position: absolute;
             top: 0; left: 0;
+            width: 100%; height: 100%;
+            background-size: cover;
+            background-position: center;
         }
-        .after-image { z-index: 2; }
-        .slider-handle {
+        .comparison-before {
             position: absolute;
-            top: 0; bottom: 0; left: 50%;
-            width: 4px;
-            background: #fff;
+            top: 0; left: 0;
+            width: 50%; height: 100%;
+            background-size: cover; /* Must match parent logic if implemented via image tag, but bg image is safer for clipping */
+            background-position: center;
+            border-right: 3px solid white;
+            overflow: hidden;
             z-index: 10;
-            box-shadow: 0 0 15px rgba(0,0,0,0.5);
-            pointer-events: none;
         }
-        .slider-circle {
+        .comparison-handle {
             position: absolute;
             top: 50%; left: 50%;
             transform: translate(-50%, -50%);
-            width: 40px; height: 40px;
-            background: #004aad;
-            border: 3px solid #fff;
+            width: 32px; height: 32px;
+            background: rgba(255,255,255,0.9);
             border-radius: 50%;
+            z-index: 20;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.3);
             display: flex;
             align-items: center;
             justify-content: center;
-            color: white;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            pointer-events: none; /* Let clicks pass to wrapper */
         }
 
         /* Blueprint Section */
@@ -291,6 +291,23 @@
             opacity: 1;
             pointer-events: auto;
         }
+
+        /* Timeline (Chi Sono) */
+        .timeline-line {
+            position: absolute;
+            left: 24px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: #334155;
+            z-index: 0;
+        }
+        @media(min-width: 768px) {
+            .timeline-line {
+                left: 50%;
+                transform: translateX(-50%);
+            }
+        }
     </style>
 </head>
 <body class="antialiased font-sans">
@@ -305,11 +322,12 @@
 
     <!-- ADMIN DASHBOARD (CMS) -->
     <div id="admin-dashboard" class="fixed inset-y-0 right-0 w-full md:w-[700px] bg-white shadow-2xl z-[200] transform translate-x-full transition-transform duration-300 flex flex-col font-sans">
+        <!-- (CMS Content identical to v5.0 with full features) -->
         <div class="bg-brand-dark text-white p-5 flex justify-between items-center shadow-md">
             <div>
                 <h2 class="font-bold text-xl text-brand-accent tracking-tight flex items-center gap-2">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
-                    CMS Admin 5.0
+                    CMS Admin 5.1
                 </h2>
                 <p class="text-xs text-gray-400">Pannello di Controllo Integrato</p>
             </div>
@@ -324,7 +342,7 @@
                 <button onclick="Admin.switchTab('projects')" id="tab-projects" class="px-5 py-3 text-sm font-bold text-brand-blue border-b-2 border-brand-blue transition-colors whitespace-nowrap">Progetti</button>
                 <button onclick="Admin.switchTab('priorities')" id="tab-priorities" class="px-5 py-3 text-sm font-bold text-gray-500 hover:text-brand-blue transition-colors whitespace-nowrap">Priorità</button>
                 <button onclick="Admin.switchTab('settings')" id="tab-settings" class="px-5 py-3 text-sm font-bold text-gray-500 hover:text-brand-blue transition-colors whitespace-nowrap">Impostazioni</button>
-                <button onclick="Admin.switchTab('texts')" id="tab-texts" class="px-5 py-3 text-sm font-bold text-gray-500 hover:text-brand-blue transition-colors whitespace-nowrap">Testi Globali</button>
+                <button onclick="Admin.switchTab('texts')" id="tab-texts" class="px-5 py-3 text-sm font-bold text-gray-500 hover:text-brand-blue transition-colors whitespace-nowrap">Testi</button>
             </div>
 
             <!-- TAB: PROJECTS -->
@@ -340,8 +358,8 @@
                     </div>
 
                     <div class="grid grid-cols-2 gap-4 mb-4">
-                        <select id="edit-year" class="p-3 border rounded-lg bg-gray-50 text-sm outline-none"></select> <!-- Populated by JS -->
-                        <select id="edit-category" class="p-3 border rounded-lg bg-gray-50 text-sm outline-none"></select> <!-- Populated by JS -->
+                        <select id="edit-year" class="p-3 border rounded-lg bg-gray-50 text-sm outline-none"></select>
+                        <select id="edit-category" class="p-3 border rounded-lg bg-gray-50 text-sm outline-none"></select>
                     </div>
 
                     <div class="grid grid-cols-2 gap-4 mb-4">
@@ -350,10 +368,9 @@
                             <option value="in_corso">🚧 In Corso</option>
                             <option value="programmato">📅 Programmato</option>
                         </select>
-                        <select id="edit-localita" class="p-3 border rounded-lg bg-gray-50 text-sm outline-none"></select> <!-- Populated by JS -->
+                        <select id="edit-localita" class="p-3 border rounded-lg bg-gray-50 text-sm outline-none"></select>
                     </div>
 
-                    <!-- Extra fields for Cantieri -->
                     <div id="cantiere-fields" class="hidden mb-4 bg-yellow-50 p-4 rounded-lg border border-yellow-100">
                          <h4 class="text-xs font-bold text-yellow-700 uppercase mb-2">Dettagli Cantiere</h4>
                          <div class="grid grid-cols-2 gap-4 mb-2">
@@ -398,7 +415,6 @@
                     </div>
                 </div>
                 
-                <!-- Project List -->
                 <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
                     <div class="p-4 bg-gray-50 border-b border-gray-200 flex justify-between items-center sticky top-0 z-10">
                         <div class="relative flex-1 mr-4">
@@ -416,8 +432,8 @@
                 <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 mb-6">
                     <h3 class="font-bold text-lg mb-4 text-gray-800">Aggiungi Priorità</h3>
                     <div class="flex gap-2 mb-2">
-                        <input type="text" id="prio-id" placeholder="ID univoco (es. green)" class="w-1/3 p-2 border rounded text-sm bg-gray-50">
-                        <input type="text" id="prio-icon" placeholder="Emoji (🌱)" class="w-1/6 p-2 border rounded text-sm bg-gray-50 text-center">
+                        <input type="text" id="prio-id" placeholder="ID univoco" class="w-1/3 p-2 border rounded text-sm bg-gray-50">
+                        <input type="text" id="prio-icon" placeholder="Emoji" class="w-1/6 p-2 border rounded text-sm bg-gray-50 text-center">
                         <input type="text" id="prio-title" placeholder="Titolo" class="flex-1 p-2 border rounded text-sm bg-gray-50 font-bold">
                     </div>
                     <textarea id="prio-desc" placeholder="Descrizione breve..." rows="2" class="w-full p-2 border rounded text-sm bg-gray-50 mb-3"></textarea>
@@ -435,17 +451,14 @@
             <div id="admin-tab-settings" class="hidden">
                 <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 mb-6 space-y-4">
                     <h3 class="font-bold text-lg text-gray-800">Configurazione Sistema</h3>
-                    
                     <div>
-                        <label class="block text-xs font-bold text-gray-500 mb-1">Anni Gestiti (separati da virgola)</label>
+                        <label class="block text-xs font-bold text-gray-500 mb-1">Anni Gestiti</label>
                         <input type="text" id="set-years" class="w-full p-2 border rounded bg-gray-50 text-sm">
                     </div>
-                    
                     <div>
-                        <label class="block text-xs font-bold text-gray-500 mb-1">Località (separate da virgola)</label>
+                        <label class="block text-xs font-bold text-gray-500 mb-1">Località</label>
                         <input type="text" id="set-locations" class="w-full p-2 border rounded bg-gray-50 text-sm">
                     </div>
-
                     <button onclick="Admin.saveSettings()" class="w-full bg-brand-blue text-white font-bold py-2 rounded shadow hover:bg-blue-700">Salva Impostazioni</button>
                 </div>
             </div>
@@ -454,21 +467,8 @@
             <div id="admin-tab-texts" class="hidden">
                  <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 space-y-4">
                     <h3 class="font-bold text-lg text-gray-800">Testi Globali</h3>
-                    <p class="text-xs text-gray-400">Modifica le intestazioni delle sezioni principali.</p>
-
-                    <div>
-                        <label class="block text-xs font-bold text-gray-500 mb-1">Titolo Hero</label>
-                        <input type="text" id="txt-hero-title" class="w-full p-2 border rounded text-sm">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold text-gray-500 mb-1">Sottotitolo Hero</label>
-                        <textarea id="txt-hero-desc" rows="2" class="w-full p-2 border rounded text-sm"></textarea>
-                    </div>
-                     <div>
-                        <label class="block text-xs font-bold text-gray-500 mb-1">Intro Cantieri</label>
-                        <textarea id="txt-wip-intro" rows="2" class="w-full p-2 border rounded text-sm"></textarea>
-                    </div>
-
+                    <div><label class="block text-xs font-bold text-gray-500 mb-1">Titolo Hero</label><input type="text" id="txt-hero-title" class="w-full p-2 border rounded text-sm"></div>
+                    <div><label class="block text-xs font-bold text-gray-500 mb-1">Sottotitolo Hero</label><textarea id="txt-hero-desc" rows="2" class="w-full p-2 border rounded text-sm"></textarea></div>
                     <button onclick="Admin.saveGlobalTexts()" class="w-full bg-brand-blue text-white font-bold py-2 rounded shadow hover:bg-blue-700">Aggiorna Testi</button>
                 </div>
             </div>
@@ -476,11 +476,9 @@
             <!-- FOOTER ACTIONS -->
             <div class="grid grid-cols-2 gap-3 mt-8 pt-6 border-t border-gray-200">
                 <button onclick="Admin.exportData()" class="bg-gray-800 text-white text-xs font-bold py-3 rounded hover:bg-gray-700 flex items-center justify-center gap-2">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
-                    Backup Completo (JSON)
+                    Backup JSON
                 </button>
                 <label class="bg-gray-800 text-white text-xs font-bold py-3 rounded hover:bg-gray-700 text-center cursor-pointer flex items-center justify-center gap-2">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
                     Ripristina
                     <input type="file" class="hidden" onchange="Admin.importData(this)" accept=".json">
                 </label>
@@ -515,6 +513,7 @@
                     <a href="#progetti" class="nav-link text-gray-600 hover:text-brand-blue font-bold text-sm uppercase tracking-wide transition-colors">Risultati</a>
                     <a href="#mappa" class="nav-link text-gray-600 hover:text-brand-blue font-bold text-sm uppercase tracking-wide transition-colors">Mappa</a>
                     <a href="#lavori-in-corso" class="nav-link text-gray-600 hover:text-brand-blue font-bold text-sm uppercase tracking-wide transition-colors">Cantieri</a>
+                    <a href="#chi-sono" class="nav-link text-gray-600 hover:text-brand-blue font-bold text-sm uppercase tracking-wide transition-colors">Chi Sono</a>
                     <a href="#priorita" class="px-5 py-2.5 bg-brand-blue text-white rounded-full font-bold text-sm shadow-lg hover:bg-blue-700 transition-all hover:scale-105 active:scale-95">Vota il Futuro</a>
                 </div>
             </div>
@@ -530,7 +529,7 @@
             <div class="inline-block bg-white/10 backdrop-blur-md border border-white/20 rounded-full px-6 py-2 mb-6 animate-fade-in-down">
                 <span class="text-brand-accent font-bold uppercase tracking-widest text-xs flex items-center gap-2">
                     <span class="w-2 h-2 rounded-full bg-green-400 animate-pulse"></span>
-                    Versione 5.0 Live
+                    Versione 5.1 Live
                 </span>
             </div>
             
@@ -559,20 +558,20 @@
     <!-- STATS DASHBOARD -->
     <section id="dashboard-stats" class="relative -mt-16 z-20 px-4">
         <div class="container mx-auto">
-            <div class="bg-white rounded-2xl shadow-xl p-6 md:p-8 border border-gray-100 grid grid-cols-2 md:grid-cols-4 gap-6 text-center transform transition-all hover:shadow-2xl">
-                <div class="p-4 rounded-xl bg-slate-50 border border-slate-100 group">
+            <div class="bg-white rounded-2xl shadow-xl p-6 md:p-8 border border-gray-100 grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+                <div class="glass-card p-4 rounded-xl bg-slate-50 border border-slate-100 group">
                     <p class="text-4xl font-bold text-brand-blue mb-1 group-hover:scale-110 transition-transform" id="stat-total">0</p>
                     <p class="text-xs md:text-sm text-gray-500 uppercase font-bold tracking-wider">Progetti Totali</p>
                 </div>
-                <div class="p-4 rounded-xl bg-green-50 border border-green-100 group">
+                <div class="glass-card p-4 rounded-xl bg-green-50 border border-green-100 group">
                     <p class="text-4xl font-bold text-green-600 mb-1 group-hover:scale-110 transition-transform" id="stat-completed">0</p>
                     <p class="text-xs md:text-sm text-gray-500 uppercase font-bold tracking-wider">Opere Concluse</p>
                 </div>
-                 <div class="p-4 rounded-xl bg-amber-50 border border-amber-100 group">
+                 <div class="glass-card p-4 rounded-xl bg-amber-50 border border-amber-100 group">
                     <p class="text-4xl font-bold text-amber-600 mb-1 group-hover:scale-110 transition-transform" id="stat-wip">0</p>
                     <p class="text-xs md:text-sm text-gray-500 uppercase font-bold tracking-wider">Cantieri Aperti</p>
                 </div>
-                 <div class="p-4 rounded-xl bg-blue-50 border border-blue-100 group">
+                 <div class="glass-card p-4 rounded-xl bg-blue-50 border border-blue-100 group">
                     <p class="text-3xl md:text-4xl font-bold text-brand-dark mb-1 whitespace-nowrap group-hover:scale-105 transition-transform" id="stat-money">€0</p>
                     <p class="text-xs md:text-sm text-gray-500 uppercase font-bold tracking-wider">Investimenti</p>
                 </div>
@@ -606,12 +605,8 @@
                     </div>
 
                     <div class="flex bg-gray-100 rounded-lg p-1">
-                        <button id="btn-view-cards" onclick="UI.setView('cards')" class="px-3 py-1.5 rounded-md text-xs font-bold transition-all flex items-center gap-1 shadow-sm bg-white text-brand-dark">
-                            Card
-                        </button>
-                        <button id="btn-view-list" onclick="UI.setView('list')" class="px-3 py-1.5 rounded-md text-xs font-bold text-gray-500 hover:text-gray-800 transition-all flex items-center gap-1">
-                            Elenco
-                        </button>
+                        <button id="btn-view-cards" onclick="UI.setView('cards')" class="px-3 py-1.5 rounded-md text-xs font-bold transition-all flex items-center gap-1 shadow-sm bg-white text-brand-dark">Card</button>
+                        <button id="btn-view-list" onclick="UI.setView('list')" class="px-3 py-1.5 rounded-md text-xs font-bold text-gray-500 hover:text-gray-800 transition-all flex items-center gap-1">Elenco</button>
                     </div>
                 </div>
 
@@ -702,8 +697,52 @@
         </div>
     </section>
 
+    <!-- CHI SONO SECTION (TIMELINE) -->
+    <section id="chi-sono" class="py-24 bg-brand-dark text-white relative">
+        <div class="container mx-auto px-6 relative z-10">
+            <div class="text-center mb-12">
+                <span class="text-brand-accent font-bold tracking-widest uppercase text-xs">Il Mio Percorso</span>
+                <h2 class="font-serif font-bold text-4xl mt-2">Al Servizio della Comunità</h2>
+            </div>
+            
+            <div class="relative max-w-4xl mx-auto py-8">
+                <div class="timeline-line bg-gray-700"></div>
+                
+                <div class="relative flex flex-col md:flex-row items-start md:items-center gap-6 mb-12 group">
+                    <div class="md:w-1/2 md:text-right">
+                        <span class="text-brand-accent font-bold text-xl">2017</span>
+                        <h3 class="font-bold text-2xl">Consigliere Comunale</h3>
+                        <p class="text-gray-400 text-sm mt-2">Inizio del servizio attivo con deleghe alle politiche giovanili e associazionismo.</p>
+                    </div>
+                    <div class="absolute left-[15px] md:left-1/2 transform -translate-x-1/2 w-4 h-4 bg-brand-accent rounded-full border-4 border-brand-dark z-10"></div>
+                    <div class="md:w-1/2 md:pl-8"></div>
+                </div>
+
+                <div class="relative flex flex-col md:flex-row items-start md:items-center gap-6 mb-12 group">
+                    <div class="md:w-1/2 md:text-right order-2 md:order-1 md:pl-8"></div>
+                    <div class="absolute left-[15px] md:left-1/2 transform -translate-x-1/2 w-4 h-4 bg-brand-blue rounded-full border-4 border-brand-dark z-10"></div>
+                    <div class="md:w-1/2 order-1 md:order-2">
+                        <span class="text-brand-blue font-bold text-xl">2022</span>
+                        <h3 class="font-bold text-2xl">Vice Sindaco</h3>
+                        <p class="text-gray-400 text-sm mt-2">Gestione diretta delle opere pubbliche e coordinamento fondi PNRR.</p>
+                    </div>
+                </div>
+
+                <div class="relative flex flex-col md:flex-row items-start md:items-center gap-6 group">
+                    <div class="md:w-1/2 md:text-right">
+                        <span class="text-white font-bold text-xl">2027</span>
+                        <h3 class="font-bold text-2xl">Verso il Futuro</h3>
+                        <p class="text-gray-400 text-sm mt-2">Pronto a mettere a frutto l'esperienza maturata per una nuova stagione di crescita.</p>
+                    </div>
+                    <div class="absolute left-[15px] md:left-1/2 transform -translate-x-1/2 w-6 h-6 bg-white rounded-full border-4 border-brand-dark z-10 animate-pulse"></div>
+                    <div class="md:w-1/2 md:pl-8"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- FOOTER -->
-    <footer class="bg-brand-dark text-white py-12 border-t border-gray-800 relative z-10">
+    <footer class="bg-gray-900 text-white py-12 border-t border-gray-800 relative z-10">
         <div class="container mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-6">
             <div class="text-center md:text-left">
                 <h4 class="font-bold text-xl tracking-wide">Avigliano Umbro 2027</h4>
@@ -720,7 +759,7 @@
         // --- DATA MODULE ---
         const Data = {
             state: {
-                schemaVersion: '5.0',
+                schemaVersion: '5.1',
                 projects: [],
                 votes: {},
                 settings: {
@@ -753,36 +792,46 @@
                 const saved = localStorage.getItem('avigliano_db_v5');
                 if (saved) {
                     const parsed = JSON.parse(saved);
-                    if(parsed.schemaVersion === '5.0') {
+                    // Check version for migration
+                    if(parsed.schemaVersion === '5.1') {
                         this.state = { ...this.state, ...parsed };
                     } else {
-                        this.migrate(parsed);
+                        // Keep user votes/settings but refresh default projects if they are old default ones
+                        this.state.votes = parsed.votes || {};
+                        this.state.priorities = parsed.priorities || this.state.priorities;
+                        this.state.settings = parsed.settings || this.state.settings;
+                        // Always force reload of defaults for this demo update to ensure real data appears
+                        if(!parsed.projects || parsed.projects.length < 5) this.loadDefaults(); 
+                        else this.state.projects = parsed.projects;
+                        this.save();
                     }
                 } else {
-                    // Try migrate v4 or load defaults
-                    const v4Proj = localStorage.getItem('avigliano_projects_v4');
-                    if(v4Proj) {
-                        this.state.projects = JSON.parse(v4Proj);
-                        this.save();
-                    } else {
-                        this.loadDefaults();
-                    }
+                    this.loadDefaults();
                 }
             },
 
             loadDefaults() {
-                // Initial Default Data if clean slate
+                // REAL DATA POPULATION
                 this.state.projects = [
-                     { id: 101, title: "Borgo 0-6 Sismano", category: "sociale", year: "2023", localita: "Sismano", importo: 45000, fonte: "Comune", stato: "concluso", desc: "Attivato servizio educativo.", imgAfter: "https://images.unsplash.com/photo-1587654780291-39c940483713?q=80&w=800" },
-                     { id: 301, title: "Asfaltatura Via Levi", category: "opere", year: "2023", localita: "Avigliano", importo: 120000, stato: "concluso", desc: "Rifacimento manto stradale.", imgAfter: "https://images.unsplash.com/photo-1590674899505-1c5c41951f89?q=80&w=800", imgBefore: "https://images.unsplash.com/photo-1533552026196-1c73a6693895?q=80&w=800" },
-                     { id: 305, title: "Centro Agorà", category: "opere", year: "2025", localita: "Avigliano", importo: 850000, stato: "in_corso", progress: 65, faseCantiere: "Impiantistica", desc: "Nuovo centro polifunzionale.", imgAfter: "https://images.unsplash.com/photo-1503387762-592deb58ef4e?q=80&w=800" }
+                     // SOCIALE
+                     { id: 101, title: "Borgo 0-6 Sismano", category: "sociale", year: "2023", localita: "Sismano", importo: 45000, fonte: "Comune", stato: "concluso", desc: "Attivato servizio educativo per la prima infanzia a Sismano.", promise: "Sostegno alla natalità e servizi infanzia.", imgAfter: "https://images.unsplash.com/photo-1587654780291-39c940483713?q=80&w=800" },
+                     { id: 102, title: "Consulta dei Giovani", category: "sociale", year: "2022", localita: "Avigliano", stato: "concluso", desc: "Avviata la Consulta con incontri istituzionali regolari.", promise: "Attenzione alle problematiche giovanili." },
+                     { id: 103, title: "Bando Case Popolari", category: "sociale", year: "2023", localita: "Comune", stato: "concluso", desc: "Pubblicazione bando e assegnazione alloggi.", promise: "Aiuto alle famiglie numerose e fragili." },
+                     
+                     // OPERE PUBBLICHE
+                     { id: 301, title: "Asfaltatura Via Levi", category: "opere", year: "2023", localita: "Avigliano", importo: 120000, stato: "concluso", desc: "Rifacimento completo del manto stradale e segnaletica.", promise: "Cura delle strade e manutenzione.", imgAfter: "https://images.unsplash.com/photo-1590674899505-1c5c41951f89?q=80&w=800", imgBefore: "https://images.unsplash.com/photo-1533552026196-1c73a6693895?q=80&w=800" },
+                     { id: 302, title: "Riqualificazione Piazza Teatro", category: "opere", year: "2024", localita: "Avigliano", importo: 65000, stato: "concluso", desc: "Nuovi lampioni, aiuole e fontana restaurata.", promise: "Miglioramento arredo urbano." },
+                     { id: 303, title: "Acquisizione Ex Cottolengo", category: "opere", year: "2024", localita: "Avigliano", importo: 477000, fonte: "PNRR", stato: "in_corso", progress: 30, faseCantiere: "Progettazione esecutiva", desc: "Acquisizione immobile storico per fini sociali.", promise: "Restituire il Cottolengo alla comunità." },
+                     { id: 304, title: "Centro Agorà", category: "opere", year: "2025", localita: "Avigliano", importo: 850000, fonte: "Regione", stato: "in_corso", progress: 65, faseCantiere: "Impiantistica", desc: "Nuovo centro polifunzionale per grandi eventi.", promise: "Realizzazione struttura polivalente." },
+                     
+                     // AMBIENTE
+                     { id: 401, title: "Tariffa Puntuale (TARIC)", category: "ambiente", year: "2023", localita: "Comune", stato: "concluso", desc: "Introdotto sistema premiante per chi ricicla.", promise: "Potenziamento differenziata e risparmio cittadini." },
+                     { id: 402, title: "Illuminazione LED", category: "ambiente", year: "2022", localita: "Tutto il territorio", importo: 200000, stato: "concluso", desc: "Efficientamento energetico pubblica illuminazione.", promise: "Comune amico dell'ambiente." },
+                     
+                     // CULTURA
+                     { id: 201, title: "Biblioteca M. Emilia Bettelli", category: "cultura", year: "2022", localita: "Avigliano", stato: "concluso", desc: "Riapertura con spazi coworking e co-studying.", promise: "Nuova vita alla biblioteca comunale." },
+                     { id: 202, title: "Foresta Fossile", category: "cultura", year: "2024", localita: "Dunarobba", importo: 150000, stato: "programmato", progress: 10, faseCantiere: "In attesa fondi", desc: "Riqualificazione centro paleontologico.", promise: "Promozione internazionale sito unico." }
                 ];
-                this.save();
-            },
-
-            migrate(oldData) {
-                // Logic to migrate older versions if needed
-                this.state = { ...this.state, ...oldData, schemaVersion: '5.0' };
                 this.save();
             },
 
@@ -792,7 +841,6 @@
 
             vote(id) {
                 if(!this.state.votes[id]) this.state.votes[id] = 0;
-                // Simple toggle logic for local user visual feedback
                 const isSelected = this.isVoted(id);
                 if(isSelected) {
                      this.state.votes[id]--;
@@ -802,7 +850,7 @@
                      localStorage.setItem(`vote_${id}`, 'true');
                 }
                 this.save();
-                return !isSelected; // return new state
+                return !isSelected;
             },
             
             isVoted(id) {
@@ -823,32 +871,59 @@
                 this.renderCantieri();
                 this.renderPriorities();
                 this.applyGlobalTexts();
+                this.initTiltEffect();
                 
-                // GSAP Animations
                 gsap.from("#hero h1", { y: 50, opacity: 0, duration: 1, delay: 0.2 });
                 gsap.from("#hero p", { y: 30, opacity: 0, duration: 1, delay: 0.4 });
                 
-                // Scroll Top Observer
                 window.addEventListener('scroll', () => {
                     const btn = document.getElementById('scroll-top');
                     if(window.scrollY > 500) btn.classList.add('visible');
                     else btn.classList.remove('visible');
                     
-                    // Sticky filter shadow
                     const fb = document.getElementById('filter-bar');
                     if(window.scrollY > document.getElementById('progetti').offsetTop) fb.classList.add('shadow-lg');
                     else fb.classList.remove('shadow-lg');
                 });
+            },
+            
+            initTiltEffect() {
+                // Apply tilt to glass cards on mousemove
+                document.addEventListener('mousemove', (e) => {
+                    document.querySelectorAll('.glass-card').forEach(card => {
+                        const rect = card.getBoundingClientRect();
+                        const x = e.clientX - rect.left;
+                        const y = e.clientY - rect.top;
+                        
+                        if (x > 0 && x < rect.width && y > 0 && y < rect.height) {
+                            const centerX = rect.width / 2;
+                            const centerY = rect.height / 2;
+                            const rotateX = ((y - centerY) / centerY) * -5; // Max 5deg
+                            const rotateY = ((x - centerX) / centerX) * 5;
+                            
+                            card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.02)`;
+                        } else {
+                            card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) scale(1)';
+                        }
+                    });
+                });
+            },
+
+            handleSlider(e, wrapper) {
+                const rect = wrapper.getBoundingClientRect();
+                const x = (e.touches ? e.touches[0].clientX : e.clientX) - rect.left;
+                let percent = (x / rect.width) * 100;
+                percent = Math.max(0, Math.min(100, percent));
+                
+                wrapper.querySelector('.comparison-before').style.width = `${percent}%`;
+                wrapper.querySelector('.comparison-handle').style.left = `${percent}%`;
             },
 
             toast(msg, type = 'info') {
                 const container = document.getElementById('toast-container');
                 const el = document.createElement('div');
                 el.className = `toast ${type}`;
-                el.innerHTML = `
-                    <span>${type === 'success' ? '✅' : (type === 'error' ? '❌' : 'ℹ️')}</span>
-                    <span>${msg}</span>
-                `;
+                el.innerHTML = `<span>${type === 'success' ? '✅' : (type === 'error' ? '❌' : 'ℹ️')}</span><span>${msg}</span>`;
                 container.appendChild(el);
                 setTimeout(() => {
                     el.style.animation = 'fadeOut 0.3s forwards';
@@ -867,13 +942,11 @@
                 const df = document.getElementById('dynamic-filters');
                 const cf = document.getElementById('category-filters');
                 
-                // Years
                 let html = `<select onchange="UI.setFilter('year', this.value)" class="bg-gray-50 border border-gray-200 text-gray-700 text-xs font-bold rounded-lg focus:ring-brand-blue focus:border-brand-blue block p-2.5 outline-none">
                     <option value="all">📅 Tutti gli Anni</option>
                     ${Data.state.settings.years.map(y => `<option value="${y}">${y}</option>`).join('')}
                 </select>`;
 
-                // Status
                 html += `<select onchange="UI.setFilter('status', this.value)" class="bg-gray-50 border border-gray-200 text-gray-700 text-xs font-bold rounded-lg focus:ring-brand-blue focus:border-brand-blue block p-2.5 outline-none">
                     <option value="all">⚡ Tutti gli Stati</option>
                     <option value="concluso">✅ Concluso</option>
@@ -881,15 +954,12 @@
                     <option value="programmato">📅 Programmato</option>
                 </select>`;
 
-                // Locations
                 html += `<select onchange="UI.setFilter('location', this.value)" class="bg-gray-50 border border-gray-200 text-gray-700 text-xs font-bold rounded-lg focus:ring-brand-blue focus:border-brand-blue block p-2.5 outline-none">
                     <option value="all">📍 Tutto il Comune</option>
                     ${Data.state.settings.locations.map(l => `<option value="${l}">${l}</option>`).join('')}
                 </select>`;
-                
                 df.innerHTML = html;
 
-                // Categories
                 let catHtml = `<button onclick="UI.setCategory('all', this)" class="filter-cat-btn active px-3 py-1 rounded-full bg-brand-dark text-white text-[10px] md:text-xs font-bold tracking-wide transition-all shadow-sm">TUTTO</button>`;
                 Data.state.settings.categories.forEach(c => {
                     catHtml += `<button onclick="UI.setCategory('${c.id}', this)" class="filter-cat-btn px-3 py-1 rounded-full bg-white border border-gray-200 text-gray-600 text-[10px] md:text-xs font-bold tracking-wide hover:bg-gray-50 transition-all shadow-sm" data-color="${c.color}">${c.label.toUpperCase()}</button>`;
@@ -919,10 +989,8 @@
             },
 
             renderProjects() {
-                // Show loader
                 const loader = document.getElementById('search-loader');
                 loader.style.opacity = '1';
-
                 setTimeout(() => {
                     const container = document.getElementById('view-container');
                     container.innerHTML = '';
@@ -938,29 +1006,19 @@
                     });
 
                     document.getElementById('results-count').innerText = `${filtered.length} Risultati`;
-                    
-                    // Grid Layout classes
-                    container.className = this.filters.view === 'cards' ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" : "flex flex-col gap-3";
+                    container.className = this.filters.view === 'cards' ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 perspective-1000" : "flex flex-col gap-3";
 
                     if(filtered.length === 0) {
-                        container.innerHTML = `<div class="col-span-3 text-center py-12 bg-white rounded-xl border border-dashed border-gray-300">
-                            <p class="text-gray-400 font-bold">Nessun progetto trovato con questi filtri.</p>
-                            <button onclick="location.reload()" class="mt-2 text-brand-blue text-xs underline">Resetta filtri</button>
-                        </div>`;
+                        container.innerHTML = `<div class="col-span-3 text-center py-12 bg-white rounded-xl border border-dashed border-gray-300"><p class="text-gray-400 font-bold">Nessun progetto trovato.</p></div>`;
                     } else {
                         filtered.forEach(p => {
                             container.appendChild(this.filters.view === 'cards' ? this.createCard(p) : this.createRow(p));
                         });
-                        
-                        // Animate In
-                        if(this.filters.view === 'cards') {
-                            gsap.fromTo(".glass-card", { y: 20, opacity: 0 }, { y: 0, opacity: 1, stagger: 0.05, duration: 0.4, clearProps: "all" });
-                        }
+                        if(this.filters.view === 'cards') gsap.fromTo(".glass-card", { y: 20, opacity: 0 }, { y: 0, opacity: 1, stagger: 0.05, duration: 0.4, clearProps: "all" });
                     }
-
                     this.renderMapMarkers(filtered);
                     loader.style.opacity = '0';
-                }, 200); // Simulated delay for interaction feeling
+                }, 200);
             },
 
             createCard(p) {
@@ -973,10 +1031,22 @@
                 
                 let imgHTML = `<div class="h-56 bg-gray-200 flex items-center justify-center text-gray-400">No Img</div>`;
                 if(p.imgAfter) {
-                    imgHTML = `<div class="h-56 overflow-hidden relative">
-                        <img src="${p.imgAfter}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" loading="lazy">
-                        <div class="absolute top-3 right-3 bg-white/90 backdrop-blur text-gray-800 text-xs font-bold px-2 py-1 rounded shadow-sm">${p.year}</div>
-                    </div>`;
+                    if(p.imgBefore) {
+                        // Slider Logic
+                        imgHTML = `
+                        <div class="h-56 relative comparison-wrapper" onmousemove="UI.handleSlider(event, this)" ontouchmove="UI.handleSlider(event, this)">
+                            <div class="comparison-after" style="background-image: url('${p.imgAfter}')"></div>
+                            <div class="comparison-before" style="background-image: url('${p.imgBefore}')"></div>
+                            <div class="comparison-handle text-gray-500"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l4-4 4 4m0 6l-4 4-4-4"></path></svg></div>
+                            <div class="absolute top-3 right-3 bg-white/90 backdrop-blur text-gray-800 text-xs font-bold px-2 py-1 rounded shadow-sm z-30">Prima/Dopo</div>
+                        </div>`;
+                    } else {
+                        // Simple Image
+                        imgHTML = `<div class="h-56 overflow-hidden relative">
+                            <img src="${p.imgAfter}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" loading="lazy">
+                            <div class="absolute top-3 right-3 bg-white/90 backdrop-blur text-gray-800 text-xs font-bold px-2 py-1 rounded shadow-sm">${p.year}</div>
+                        </div>`;
+                    }
                 }
 
                 div.innerHTML = `
@@ -989,7 +1059,8 @@
                         <h3 class="font-bold text-lg mb-1 text-brand-dark leading-tight group-hover:text-brand-blue transition-colors">${p.title}</h3>
                         <div class="text-xs text-gray-500 mb-3">📍 ${p.localita || 'Comune'}</div>
                         <p class="text-sm text-gray-600 line-clamp-3 mb-4">${p.desc}</p>
-                        <div class="mt-auto pt-4 border-t border-gray-100 text-xs text-gray-400 font-medium">
+                        ${p.promise ? `<div class="promise-quote mt-auto">${p.promise}</div>` : ''}
+                        <div class="pt-4 border-t border-gray-100 text-xs text-gray-400 font-medium mt-2">
                             ${p.importo ? `Investimento: <span class="text-gray-600 font-bold">€${Number(p.importo).toLocaleString()}</span>` : ''}
                         </div>
                     </div>
@@ -1012,12 +1083,13 @@
                         <div class="text-xs font-bold bg-gray-100 px-2 py-1 rounded">${p.stato}</div>
                     </div>
                     <div class="list-details mt-0 text-xs text-gray-600 pt-0 border-t-0 border-gray-100">
-                        <div class="p-4 bg-gray-50 rounded mt-2 flex gap-4">
-                            <img src="${p.imgAfter}" class="w-24 h-24 object-cover rounded bg-gray-200">
+                        <div class="p-4 bg-gray-50 rounded mt-2 flex gap-4 flex-col md:flex-row">
+                            <img src="${p.imgAfter}" class="w-full md:w-32 h-32 object-cover rounded bg-gray-200">
                             <div class="flex-1">
-                                <p class="mb-2 font-bold text-brand-blue">${p.promise || ''}</p>
+                                ${p.promise ? `<p class="mb-2 text-brand-blue bg-blue-50 p-2 rounded border-l-2 border-brand-blue italic">"Obiettivo: ${p.promise}"</p>` : ''}
+                                <p class="font-bold mb-1">Risultato:</p>
                                 <p>${p.desc}</p>
-                                ${p.importo ? `<p class="mt-2 font-bold">€${Number(p.importo).toLocaleString()}</p>` : ''}
+                                ${p.importo ? `<p class="mt-2 font-bold text-gray-800">Investimento: €${Number(p.importo).toLocaleString()}</p>` : ''}
                             </div>
                         </div>
                     </div>
@@ -1028,21 +1100,13 @@
             renderMapMarkers(list) {
                 const c = document.getElementById('map-markers-container');
                 c.innerHTML = '';
-                // Simulating coordinates mapping
-                const pos = { 'Avigliano': [50, 45], 'Sismano': [30, 70], 'Dunarobba': [60, 30], 'Toscolano': [25, 40], 'Santa Restituta': [70, 60] };
+                const pos = { 'Avigliano': [50, 45], 'Sismano': [30, 70], 'Dunarobba': [60, 30], 'Toscolano': [25, 40], 'Santa Restituta': [70, 60], 'Comune': [50, 50], 'Tutto': [40,60] };
                 
                 list.forEach(p => {
-                    const loc = (p.localita || 'Avigliano').split(' ')[0];
-                    const [top, left] = pos[loc] || [50, 50];
-                    // Jitter
+                    const locKey = Object.keys(pos).find(k => (p.localita || '').includes(k)) || 'Avigliano';
+                    const [top, left] = pos[locKey];
                     const ft = top + (Math.random()*10 - 5);
                     const fl = left + (Math.random()*10 - 5);
-                    
-                    const catColor = Data.state.settings.categories.find(cat => cat.id === p.category)?.color || 'gray';
-                    // Tailwind colors are hard to dynamically interpolate in class strings safely without full whitelist, 
-                    // so we use inline style for bg color mapping based on our known palette
-                    const colorMap = { 'social': '#3b82f6', 'culture': '#10b981', 'works': '#854d0e', 'env': '#f97316', 'admin': '#475569' };
-                    // fallback mapping based on category id string match
                     let bg = '#fbbf24'; 
                     if(p.category.includes('social')) bg = '#3b82f6';
                     if(p.category.includes('cultur')) bg = '#10b981';
@@ -1055,12 +1119,7 @@
                     m.style.left = `${fl}%`;
                     m.style.backgroundColor = bg;
                     
-                    m.innerHTML = `
-                        <div class="map-popup shadow-lg">
-                            <strong class="text-brand-blue block mb-1">${p.title}</strong>
-                            <span class="text-xs text-gray-500">${p.year}</span>
-                        </div>
-                    `;
+                    m.innerHTML = `<div class="map-popup shadow-lg"><strong class="text-brand-blue block mb-1">${p.title}</strong><span class="text-xs text-gray-500">${p.year}</span></div>`;
                     m.onmouseenter = () => {
                          const card = document.getElementById(`proj-card-${p.id}`);
                          if(card) {
@@ -1086,7 +1145,6 @@
             renderCantieri() {
                 const container = document.getElementById('wip-container');
                 container.innerHTML = '';
-                
                 const filtered = Data.state.projects.filter(p => {
                     const isWip = p.stato === 'in_corso' || p.stato === 'programmato';
                     const matchType = this.cantiereFilter === 'all' || p.stato === this.cantiereFilter;
@@ -1099,7 +1157,7 @@
                 }
 
                 filtered.forEach(p => {
-                    const progress = p.progress || (p.stato === 'in_corso' ? 50 : 0);
+                    const progress = p.progress || (p.stato === 'in_corso' ? 50 : 10);
                     const div = document.createElement('div');
                     div.className = "bg-white/10 backdrop-blur-md border border-white/20 p-6 rounded-2xl flex flex-col hover:bg-white/15 transition-colors";
                     div.innerHTML = `
@@ -1111,17 +1169,9 @@
                             <p class="text-gray-200 text-sm mb-2">${p.desc}</p>
                             ${p.noteCantiere ? `<p class="text-xs text-yellow-200 bg-yellow-400/10 p-2 rounded">ℹ️ ${p.noteCantiere}</p>` : ''}
                         </div>
-                        
                         <div class="mt-auto">
-                            <div class="flex justify-between text-xs text-blue-200 mb-1">
-                                <span>${p.faseCantiere || 'Fase operativa'}</span>
-                                <span>${progress}%</span>
-                            </div>
-                            <div class="w-full bg-blue-900/50 rounded-full h-2">
-                                <div class="bg-yellow-400 h-full rounded-full transition-all duration-1000 relative" style="width: ${progress}%">
-                                    <div class="absolute right-0 top-1/2 -translate-y-1/2 w-2 h-2 bg-white rounded-full shadow"></div>
-                                </div>
-                            </div>
+                            <div class="flex justify-between text-xs text-blue-200 mb-1"><span>${p.faseCantiere || 'Fase operativa'}</span><span>${progress}%</span></div>
+                            <div class="w-full bg-blue-900/50 rounded-full h-2"><div class="bg-yellow-400 h-full rounded-full transition-all duration-1000 relative" style="width: ${progress}%"></div></div>
                         </div>
                     `;
                     container.appendChild(div);
@@ -1133,12 +1183,9 @@
                 const chart = document.getElementById('priority-chart');
                 grid.innerHTML = '';
                 chart.innerHTML = '';
-                
                 Data.state.priorities.forEach(p => {
                     const votes = Data.state.votes[p.id] || 0;
                     const isVoted = Data.isVoted(p.id);
-                    
-                    // Card
                     const card = document.createElement('div');
                     card.className = `priority-card bg-white p-6 rounded-xl border border-gray-200 relative group ${isVoted ? 'selected' : ''}`;
                     card.onclick = () => {
@@ -1155,19 +1202,13 @@
                         <p class="text-sm text-gray-500">${p.desc}</p>
                     `;
                     grid.appendChild(card);
-
-                    // Chart Bar
-                    // calculate max for scale
                     const max = Math.max(...Object.values(Data.state.votes), 10);
                     const width = (votes / max) * 100;
-                    
                     const bar = document.createElement('div');
                     bar.className = "flex items-center gap-4 text-xs";
                     bar.innerHTML = `
                         <span class="w-32 font-bold text-gray-600 truncate text-right">${p.title}</span>
-                        <div class="flex-1 bg-gray-100 rounded-full h-3 overflow-hidden">
-                            <div class="bg-brand-blue h-full rounded-full transition-all duration-1000" style="width: ${Math.max(width, 2)}%"></div>
-                        </div>
+                        <div class="flex-1 bg-gray-100 rounded-full h-3 overflow-hidden"><div class="bg-brand-blue h-full rounded-full transition-all duration-1000" style="width: ${Math.max(width, 2)}%"></div></div>
                         <span class="w-8 font-mono text-gray-400">${votes}</span>
                     `;
                     chart.appendChild(bar);
@@ -1215,16 +1256,12 @@
             },
             toggle() { document.getElementById('admin-dashboard').classList.toggle('translate-x-full'); },
             logout() { location.reload(); },
-            
             switchTab(tab) {
                 document.querySelectorAll('[id^="admin-tab-"]').forEach(el => el.classList.add('hidden'));
                 document.getElementById(`admin-tab-${tab}`).classList.remove('hidden');
-                
                 document.querySelectorAll('[id^="tab-"]').forEach(el => el.className = "px-5 py-3 text-sm font-bold text-gray-500 hover:text-brand-blue transition-colors whitespace-nowrap");
                 document.getElementById(`tab-${tab}`).className = "px-5 py-3 text-sm font-bold text-brand-blue border-b-2 border-brand-blue transition-colors whitespace-nowrap";
             },
-
-            // Projects Logic
             editingId: null,
             resetForm() {
                 this.editingId = null;
@@ -1238,7 +1275,6 @@
                 const search = document.getElementById('admin-search').value.toLowerCase();
                 list.innerHTML = '';
                 document.getElementById('admin-count').innerText = Data.state.projects.length;
-
                 Data.state.projects.filter(p => p.title.toLowerCase().includes(search)).forEach((p, idx) => {
                     const div = document.createElement('div');
                     div.className = "flex items-center justify-between p-3 hover:bg-blue-50 transition-colors";
@@ -1263,8 +1299,6 @@
                 if(!p) return;
                 this.editingId = id;
                 document.getElementById('form-title').innerText = "Modifica: " + p.title;
-                
-                // Populate fields
                 document.getElementById('edit-title').value = p.title;
                 document.getElementById('edit-year').value = p.year;
                 document.getElementById('edit-category').value = p.category;
@@ -1275,19 +1309,15 @@
                 document.getElementById('edit-link').value = p.linkDelibera || '';
                 document.getElementById('edit-promise').value = p.promise || '';
                 document.getElementById('edit-desc').value = p.desc || '';
-                
                 document.getElementById('edit-progress').value = p.progress || '';
                 document.getElementById('edit-fase').value = p.faseCantiere || '';
                 document.getElementById('edit-note-cantiere').value = p.noteCantiere || '';
-                
                 this.toggleCantiereFields();
-                // Scroll to form
                 document.getElementById('admin-tab-projects').scrollIntoView();
             },
             async saveProject() {
                 const title = document.getElementById('edit-title').value;
                 if(!title) return UI.toast('Titolo obbligatorio', 'error');
-
                 const newProj = {
                     id: this.editingId || Date.now(),
                     title: title,
@@ -1305,8 +1335,6 @@
                     noteCantiere: document.getElementById('edit-note-cantiere').value,
                     imgAfter: "", imgBefore: ""
                 };
-
-                // Handle Images (keep old if not changed)
                 if(this.editingId) {
                     const old = Data.state.projects.find(p => p.id === this.editingId);
                     newProj.imgAfter = old.imgAfter;
@@ -1316,14 +1344,12 @@
                 const fBefore = document.getElementById('file-before').files[0];
                 if(fAfter) newProj.imgAfter = await this.compress(fAfter);
                 if(fBefore) newProj.imgBefore = await this.compress(fBefore);
-
                 if(this.editingId) {
                     const idx = Data.state.projects.findIndex(p => p.id === this.editingId);
                     Data.state.projects[idx] = newProj;
                 } else {
                     Data.state.projects.unshift(newProj);
                 }
-                
                 Data.save();
                 this.resetForm();
                 this.renderProjectsList();
@@ -1344,13 +1370,11 @@
             moveProject(idx, dir) {
                 const arr = Data.state.projects;
                 if(idx + dir < 0 || idx + dir >= arr.length) return;
-                [arr[idx], arr[idx+dir]] = [arr[idx+dir], arr[idx]]; // swap
+                [arr[idx], arr[idx+dir]] = [arr[idx+dir], arr[idx]];
                 Data.save();
                 this.renderProjectsList();
                 UI.renderProjects();
             },
-
-            // Priorities Logic
             renderPrioritiesList() {
                 const c = document.getElementById('admin-priorities-list');
                 c.innerHTML = '';
@@ -1389,12 +1413,9 @@
                     UI.toast('Voti azzerati', 'info');
                 }
             },
-
-            // Settings Logic
             renderSettingsForm() {
                 document.getElementById('set-years').value = Data.state.settings.years.join(', ');
                 document.getElementById('set-locations').value = Data.state.settings.locations.join(', ');
-                // Populate selects in Project Form
                 this.updateSelects();
             },
             saveSettings() {
@@ -1405,7 +1426,7 @@
                     Data.state.settings.locations = l;
                     Data.save();
                     this.updateSelects();
-                    UI.renderFilters(); // Update frontend filters
+                    UI.renderFilters();
                     UI.toast('Configurazione salvata', 'success');
                 }
             },
@@ -1413,13 +1434,10 @@
                 const ySel = document.getElementById('edit-year');
                 const lSel = document.getElementById('edit-localita');
                 const cSel = document.getElementById('edit-category');
-                
                 ySel.innerHTML = Data.state.settings.years.map(x => `<option value="${x}">${x}</option>`).join('');
                 lSel.innerHTML = Data.state.settings.locations.map(x => `<option value="${x}">${x}</option>`).join('');
                 cSel.innerHTML = Data.state.settings.categories.map(x => `<option value="${x.id}">${x.label}</option>`).join('');
             },
-
-            // Texts Logic
             renderTextsForm() {
                 document.getElementById('txt-hero-title').value = Data.state.texts.heroTitle || '';
                 document.getElementById('txt-hero-desc').value = Data.state.texts.heroDesc || '';
@@ -1435,8 +1453,6 @@
                 UI.applyGlobalTexts();
                 UI.toast('Testi aggiornati', 'success');
             },
-
-            // Utils
             compress(file) {
                 return new Promise(resolve => {
                     const r = new FileReader();
@@ -1476,7 +1492,7 @@
                 r.onload = e => {
                     try {
                         const d = JSON.parse(e.target.result);
-                        if(d.schemaVersion === '5.0' || confirm('Versione schema differente. Importare comunque?')) {
+                        if(d.schemaVersion === '5.1' || confirm('Versione schema differente. Importare comunque?')) {
                             Data.state = d;
                             Data.save();
                             location.reload();
@@ -1487,12 +1503,9 @@
             }
         };
 
-        // --- INIT ---
         window.addEventListener('DOMContentLoaded', () => {
             Data.init();
             UI.init();
-            
-            // Search Debounce
             document.getElementById('search-input').addEventListener('input', (e) => {
                 clearTimeout(window.searchTimer);
                 window.searchTimer = setTimeout(() => {
@@ -1501,7 +1514,6 @@
                 }, 300);
             });
         });
-
     </script>
 </body>
 </html>
