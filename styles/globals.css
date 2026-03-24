@@ -15,8 +15,8 @@
   --color-line: #DDD5C8;
   --color-ink: #2D2926;
 
-  --font-cormorant: 'Cormorant Garamond', Georgia, serif;
-  --font-dm-sans: 'DM Sans', system-ui, sans-serif;
+  --font-cormorant: 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
+  --font-dm-sans: 'DM Sans', system-ui, -apple-system, sans-serif;
 }
 
 * {
